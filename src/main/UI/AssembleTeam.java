@@ -8,6 +8,7 @@ public class AssembleTeam{
    private Scanner scanner;
    private String teamname;
 
+
    public AssembleTeam(){
 
        teamlog = new ArrayList<>();
@@ -48,8 +49,8 @@ public class AssembleTeam{
         System.out.println("The team you have assembled:"+ teamname + "" + teamlog);
         }
 
-    public static void main(String[] args) {
-    new AssembleTeam();
+    public String toString() {
+        return teamname + " " + teamlog;
     }
 
 }
