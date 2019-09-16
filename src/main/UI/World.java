@@ -2,17 +2,27 @@ package UI;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class World {
 
     private ArrayList<AssembleTeam> worldlog;
     private Scanner scanner;
+    private ArrayList<PlayerLog> playerpool;
 
-    public World(){
+    private World(ArrayList<PlayerLog> playerpool){
 
     worldlog = new ArrayList<>();
     scanner = new Scanner(System.in);
+    this.playerpool=playerpool;
     UserMenu();
+
     }
 
     private void UserMenu(){
@@ -25,7 +35,7 @@ public class World {
             selection = scanner.nextInt();
 
             if (selection == 1) {
-                AssembleTeam assembleTeam = new AssembleTeam();
+                AssembleTeam assembleTeam = new AssembleTeam(playerpool);
                 worldlog.add(assembleTeam);
             }
 
@@ -47,10 +57,28 @@ public class World {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        ArrayList<PlayerLog> playerpool = new ArrayList<>();
 
-    new World();
+        List<String> lines = Files.readAllLines(Paths.get("NBApool.csv"));
+
+        for (String line : lines){
+            ArrayList<String> partsOfLine = splitOnSpace(line);
+            System.out.print("ID: "+partsOfLine.get(0)+" ");
+            System.out.print("Name: "+partsOfLine.get(1)+" ");
+            System.out.println("Overall: "+partsOfLine.get(15));
+            PlayerLog playerLog = new PlayerLog(Integer.parseInt(partsOfLine.get(0)),partsOfLine.get(1),Double.parseDouble(partsOfLine.get(15)));
+            playerpool.add(playerLog);
+
+        }
+
+        new World(playerpool);
+
 
     }
 
+    private static ArrayList<String> splitOnSpace(String line){
+        String[] splits = line.split(",");
+        return new ArrayList<>(Arrays.asList(splits));
+    }
 }

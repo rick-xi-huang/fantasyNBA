@@ -3,22 +3,25 @@ package UI;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class AssembleTeam{
    private ArrayList<PlayerLog> teamlog;
    private Scanner scanner;
    private String teamname;
+   private ArrayList<PlayerLog> playerpool;
 
-
-   public AssembleTeam(){
+   AssembleTeam(ArrayList<PlayerLog> playerpool){
 
        teamlog = new ArrayList<>();
        scanner = new Scanner(System.in);
+       this.playerpool=playerpool;
        InputOperations();
    }
 
         private void InputOperations() {
         String operation;
-        int rating;
+        int selection;
+        int interval = 0;
 
         System.out.println("Please enter your team name:");
         operation=scanner.nextLine();
@@ -33,24 +36,28 @@ public class AssembleTeam{
         break;
         }
 
-        PlayerLog playerLog = new PlayerLog();
-        System.out.println("Please enter the player name");
-        operation=scanner.nextLine();
-        playerLog.setName(operation);
+        int x = interval + (int)(Math.random()*((10-1)+1))+ 1;
+        int y = interval + (int)(Math.random()*((10-1)+1))+ 1;
+        int z = interval + (int)(Math.random()*((10-1)+1))+ 1;
 
-        System.out.println("Please enter the player overall rating");
-        rating=scanner.nextInt();
+        PlayerLog candidate1 = playerpool.get(x);
+        PlayerLog candidate2 = playerpool.get(y);
+        PlayerLog candidate3 = playerpool.get(z);
+
+        System.out.println("Please enter the player ID");
+        System.out.println(candidate1+ "" + candidate2 + "" + candidate3);
+        selection=scanner.nextInt();
         scanner.nextLine();
-        playerLog.setRating(rating);
+        teamlog.add(playerpool.get(selection-1));
+        interval = interval + 10;
 
-        teamlog.add(playerLog);
         }
 
         System.out.println("The team you have assembled:"+ teamname + "" + teamlog);
         }
 
     public String toString() {
-        return teamname + " " + teamlog;
+        return teamname + "   " + teamlog;
     }
 
 }

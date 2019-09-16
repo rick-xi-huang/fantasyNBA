@@ -1,24 +1,26 @@
 package UI;
 
 public class PlayerLog {
+     private int id;
      private String name;
-     private int overall;
+     private double overall;
 
-     public PlayerLog(){
-     name = "";
-     overall = 60;
+     PlayerLog(int id, String name, double overall){
+         this.id = id;
+         this.name = name;
+         this.overall = overall;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setRating(int rating) {
-        this.overall = rating;
+    public void setRating(double overall) {
+        this.overall = overall;
     }
 
     public String toString() {
-        return name + " " + overall;
+        return "(" + id + ")" + " " + name + " " + overall;
     }
 
 }
