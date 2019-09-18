@@ -1,14 +1,14 @@
-package UI;
+package ui;
 
 public class PlayerLog {
-     private int id;
-     private String name;
-     private double overall;
+    private int id;
+    private String name;
+    private double overall;
 
-     PlayerLog(int id, String name, double overall){
-         this.id = id;
-         this.name = name;
-         this.overall = overall;
+    PlayerLog(int id, String name, double overall) {
+        this.id = id;
+        this.name = name;
+        this.overall = overall;
     }
 
     public void setName(String name) {
