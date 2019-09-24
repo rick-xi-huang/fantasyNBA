@@ -1,20 +1,26 @@
 package ui;
 
+import model.Player;
+import model.Playerpool;
+import model.Team;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.IOException;
 
 public class World {
 
-    private ArrayList<AssembleTeam> worldlog;
+    private ArrayList<Team> worldlog;
     private Scanner scanner;
-    private ArrayList<PlayerLog> allplayers;
+    private ArrayList<Player> allplayers;
+    private Playerpool playerpool;
 
-    private World(ArrayList<PlayerLog> allplayers) {
+    private World() throws IOException {
 
         worldlog = new ArrayList<>();
         scanner = new Scanner(System.in);
-        this.allplayers = allplayers;
+        playerpool = new Playerpool();
+        this.allplayers = playerpool.getallplayers();
 
     }
 
@@ -43,8 +49,44 @@ public class World {
     }
 
     private void newTeam() {
-        AssembleTeam assembleTeam = new AssembleTeam(allplayers);
-        worldlog.add(assembleTeam);
+        String input;
+        int selection;
+        int interval = 0;
+
+        Team team = new Team();
+        scanner.nextLine();
+        System.out.println("Please enter your team name:");
+        input = scanner.nextLine();
+        team.setTeamname(input);
+
+        while (true) {
+            System.out.println("Please select an option (add player or quit):");
+            input = scanner.nextLine();
+            System.out.println("you selected: " + input);
+
+            if (input.equals("quit")) {
+                break;
+            }
+
+            int x = interval + (int) (Math.random() * ((10 - 1) + 1)) + 1;
+            int y = interval + (int) (Math.random() * ((10 - 1) + 1)) + 1;
+            int z = interval + (int) (Math.random() * ((10 - 1) + 1)) + 1;
+
+            Player candidate1 = allplayers.get(x);
+            Player candidate2 = allplayers.get(y);
+            Player candidate3 = allplayers.get(z);
+
+            System.out.println("Please enter the player ID");
+            System.out.println(candidate1 + "" + candidate2 + "" + candidate3);
+            selection = scanner.nextInt();
+            scanner.nextLine();
+            team.addplayer(allplayers.get(selection - 1));
+            interval = interval + 10;
+
+        }
+
+        System.out.println("The team you have assembled:" + team.getTeamname() + "" + team.getTeamplayers());
+        worldlog.add(team);
     }
 
     private void deleteTeam() {
@@ -55,8 +97,7 @@ public class World {
 
     public static void main(String[] args) throws IOException {
 
-        Playerpool playerpool = new Playerpool();
-        World world = new World(playerpool.allplayers);
+        World world = new World();
         world.userMenu();
     }
 
