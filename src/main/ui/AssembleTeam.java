@@ -8,13 +8,13 @@ public class AssembleTeam {
     private ArrayList<PlayerLog> teamlog;
     private Scanner scanner;
     private String teamname;
-    private ArrayList<PlayerLog> playerpool;
+    private ArrayList<PlayerLog> allplayers;
 
-    AssembleTeam(ArrayList<PlayerLog> playerpool) {
+    AssembleTeam(ArrayList<PlayerLog> allplayers) {
 
         teamlog = new ArrayList<>();
         scanner = new Scanner(System.in);
-        this.playerpool = playerpool;
+        this.allplayers = allplayers;
         inputOperations();
     }
 
@@ -40,15 +40,15 @@ public class AssembleTeam {
             int y = interval + (int) (Math.random() * ((10 - 1) + 1)) + 1;
             int z = interval + (int) (Math.random() * ((10 - 1) + 1)) + 1;
 
-            PlayerLog candidate1 = playerpool.get(x);
-            PlayerLog candidate2 = playerpool.get(y);
-            PlayerLog candidate3 = playerpool.get(z);
+            PlayerLog candidate1 = allplayers.get(x);
+            PlayerLog candidate2 = allplayers.get(y);
+            PlayerLog candidate3 = allplayers.get(z);
 
             System.out.println("Please enter the player ID");
             System.out.println(candidate1 + "" + candidate2 + "" + candidate3);
             selection = scanner.nextInt();
             scanner.nextLine();
-            teamlog.add(playerpool.get(selection - 1));
+            teamlog.add(allplayers.get(selection - 1));
             interval = interval + 10;
 
         }

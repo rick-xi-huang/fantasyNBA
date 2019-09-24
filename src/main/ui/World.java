@@ -3,23 +3,18 @@ package ui;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 
 public class World {
 
     private ArrayList<AssembleTeam> worldlog;
     private Scanner scanner;
-    private ArrayList<PlayerLog> playerpool;
+    private ArrayList<PlayerLog> allplayers;
 
-    private World(ArrayList<PlayerLog> playerpool) {
+    private World(ArrayList<PlayerLog> allplayers) {
 
         worldlog = new ArrayList<>();
         scanner = new Scanner(System.in);
-        this.playerpool = playerpool;
-        userMenu();
+        this.allplayers = allplayers;
 
     }
 
@@ -28,58 +23,41 @@ public class World {
         int selection;
 
         while (true) {
-
             System.out.println("Please select an option: \n 1 Add a new team  "
                     + "\n 2 Delete a team \n 3 Review all teams \n 4 Quit");
             selection = scanner.nextInt();
-
             if (selection == 1) {
-                AssembleTeam assembleTeam = new AssembleTeam(playerpool);
-                worldlog.add(assembleTeam);
+                newTeam();
             }
-
             if (selection == 2) {
-                System.out.println("All teams:" + worldlog + "\n Please select the team to delete");
-                int choice = scanner.nextInt();
-                worldlog.remove(choice);
+                deleteTeam();
             }
-
             if (selection == 3) {
                 System.out.println("All teams:" + worldlog);
             }
-
             if (selection == 4) {
                 break;
             }
-
         }
 
+    }
+
+    private void newTeam() {
+        AssembleTeam assembleTeam = new AssembleTeam(allplayers);
+        worldlog.add(assembleTeam);
+    }
+
+    private void deleteTeam() {
+        System.out.println("All teams:" + worldlog + "\n Please select the team to delete");
+        int choice = scanner.nextInt();
+        worldlog.remove(choice);
     }
 
     public static void main(String[] args) throws IOException {
 
-        ArrayList<PlayerLog> playerpool = new ArrayList<>();
-
-        List<String> lines = Files.readAllLines(Paths.get("NBApool.csv"));
-
-        for (String line : lines) {
-            ArrayList<String> partsOfLine = splitOnSpace(line);
-            System.out.print("ID: " + partsOfLine.get(0) + " ");
-            System.out.print("Name: " + partsOfLine.get(1) + " ");
-            System.out.println("Overall: " + partsOfLine.get(15));
-            PlayerLog playerLog = new PlayerLog(Integer.parseInt(partsOfLine.get(0)),
-                    partsOfLine.get(1), Double.parseDouble(partsOfLine.get(15)));
-            playerpool.add(playerLog);
-
-        }
-
-        new World(playerpool);
-
-
+        Playerpool playerpool = new Playerpool();
+        World world = new World(playerpool.allplayers);
+        world.userMenu();
     }
 
-    private static ArrayList<String> splitOnSpace(String line) {
-        String[] splits = line.split(",");
-        return new ArrayList<>(Arrays.asList(splits));
-    }
 }
