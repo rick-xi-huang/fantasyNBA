@@ -11,6 +11,11 @@ public class Playerpool {
 
     ArrayList<Player> allplayers;
 
+    //load player information from the player pool
+    //REQUIRES: NBApool.csv in correct format
+    //MODIFIES: this
+    //EFFECTS: store all player information in the playerpool object field
+
     public Playerpool() throws IOException {
         allplayers = new ArrayList<Player>();
 
@@ -32,6 +37,9 @@ public class Playerpool {
         String[] splits = line.split(",");
         return new ArrayList<>(Arrays.asList(splits));
     }
+
+    //obtain all player information the playerpool object
+    //EFFECTS: return all player information as an ArrayList of player objects
 
     public ArrayList<Player> getallplayers() {
         return allplayers;

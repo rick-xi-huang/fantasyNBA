@@ -24,6 +24,10 @@ public class World {
 
     }
 
+    //generate a user input menu with different choices
+    //REQUIRES: correct user input
+    //MODIFIES: this team player
+    //EFFECTS: add a new team object / delete a team object / review all team objects / quit
     private void userMenu() {
 
         int selection;
@@ -48,6 +52,10 @@ public class World {
 
     }
 
+    //generate a new team based on user input
+    //REQUIRES: correct user input
+    //MODIFIES: this team player
+    //EFFECTS: create a new team object
     private void newTeam() {
         String input;
         int selection;
@@ -89,6 +97,10 @@ public class World {
         worldlog.add(team);
     }
 
+    //delete a team based on user input
+    //REQUIRES: correct user input
+    //MODIFIES: this
+    //EFFECTS: remove a team object from worldlog
     private void deleteTeam() {
         System.out.println("All teams:" + worldlog + "\n Please select the team to delete");
         int choice = scanner.nextInt();
