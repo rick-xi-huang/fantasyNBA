@@ -4,18 +4,18 @@ import model.Player;
 import model.Playerpool;
 import model.Team;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.IOException;
 
-public class World {
+public class World implements Serializable, Loadable, Saveable {
 
-    private ArrayList<Team> worldlog;
+    public ArrayList<Team> worldlog;
     private Scanner scanner;
     private ArrayList<Player> allplayers;
     private Playerpool playerpool;
 
-    private World() throws IOException {
+    public World() throws IOException {
 
         worldlog = new ArrayList<>();
         scanner = new Scanner(System.in);
@@ -28,13 +28,13 @@ public class World {
     //REQUIRES: correct user input
     //MODIFIES: this team player
     //EFFECTS: add a new team object / delete a team object / review all team objects / quit
-    private void userMenu() {
+    private void userMenu() throws IOException, ClassNotFoundException {
 
         int selection;
 
         while (true) {
             System.out.println("Please select an option: \n 1 Add a new team  "
-                    + "\n 2 Delete a team \n 3 Review all teams \n 4 Quit");
+                    + "\n 2 Delete a team \n 3 Review all teams \n 4 Load\n 5 Save \n 6 Quit");
             selection = scanner.nextInt();
             if (selection == 1) {
                 newTeam();
@@ -46,6 +46,12 @@ public class World {
                 System.out.println("All teams:" + worldlog);
             }
             if (selection == 4) {
+                load();
+            }
+            if (selection == 5) {
+                save();
+            }
+            if (selection == 6) {
                 break;
             }
         }
@@ -107,10 +113,26 @@ public class World {
         worldlog.remove(choice);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         World world = new World();
         world.userMenu();
+    }
+
+    @Override
+    public void load() throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream("t.tmp");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        worldlog = (ArrayList<Team>) ois.readObject();
+        ois.close();
+    }
+
+    @Override
+    public void save() throws IOException {
+        FileOutputStream fos = new FileOutputStream("t.tmp");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(worldlog);
+        oos.close();
     }
 
 }

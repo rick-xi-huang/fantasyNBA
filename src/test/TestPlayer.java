@@ -23,7 +23,7 @@ class TestPlayer {
 
     @Test
     void testGetOverall() {
-        assertEquals(player.getOverall(), "88");
+        assertEquals(player.getOverall(), 88);
     }
 
     @Test
