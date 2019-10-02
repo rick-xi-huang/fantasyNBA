@@ -1,5 +1,6 @@
 package ui;
 
+import data.Worldlog;
 import model.Player;
 import model.Playerpool;
 import model.Team;
@@ -8,16 +9,16 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class World implements Serializable, Loadable, Saveable {
+public class World implements Serializable {
 
-    public ArrayList<Team> worldlog;
+    private ArrayList<Team> currentTeams;
     private Scanner scanner;
     private ArrayList<Player> allplayers;
     private Playerpool playerpool;
 
     public World() throws IOException {
 
-        worldlog = new ArrayList<>();
+        currentTeams = new ArrayList<>();
         scanner = new Scanner(System.in);
         playerpool = new Playerpool();
         this.allplayers = playerpool.getallplayers();
@@ -43,7 +44,7 @@ public class World implements Serializable, Loadable, Saveable {
                 deleteTeam();
             }
             if (selection == 3) {
-                System.out.println("All teams:" + worldlog);
+                System.out.println("All teams:" + currentTeams);
             }
             if (selection == 4) {
                 load();
@@ -100,17 +101,31 @@ public class World implements Serializable, Loadable, Saveable {
         }
 
         System.out.println("The team you have assembled:" + team.getTeamname() + "" + team.getTeamplayers());
-        worldlog.add(team);
+        currentTeams.add(team);
     }
 
     //delete a team based on user input
     //REQUIRES: correct user input
     //MODIFIES: this
-    //EFFECTS: remove a team object from worldlog
+    //EFFECTS: remove a team object from currentTeams
     private void deleteTeam() {
-        System.out.println("All teams:" + worldlog + "\n Please select the team to delete");
+        System.out.println("All teams:" + currentTeams + "\n Please select the team to delete");
         int choice = scanner.nextInt();
-        worldlog.remove(choice);
+        currentTeams.remove(choice);
+    }
+
+    public void load() throws IOException, ClassNotFoundException {
+
+        Worldlog worldlog = new Worldlog();
+        worldlog.load();
+        currentTeams = worldlog.getCurrentTeams();
+    }
+
+
+    public void save() throws IOException {
+
+        Worldlog worldlog = new Worldlog(currentTeams);
+        worldlog.save();
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -118,21 +133,4 @@ public class World implements Serializable, Loadable, Saveable {
         World world = new World();
         world.userMenu();
     }
-
-    @Override
-    public void load() throws IOException, ClassNotFoundException {
-        FileInputStream fis = new FileInputStream("t.tmp");
-        ObjectInputStream ois = new ObjectInputStream(fis);
-        worldlog = (ArrayList<Team>) ois.readObject();
-        ois.close();
-    }
-
-    @Override
-    public void save() throws IOException {
-        FileOutputStream fos = new FileOutputStream("t.tmp");
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(worldlog);
-        oos.close();
-    }
-
 }

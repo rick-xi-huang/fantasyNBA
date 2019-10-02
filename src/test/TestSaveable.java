@@ -1,31 +1,33 @@
+import data.Worldlog;
 import model.Team;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ui.World;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TestSaveable {
 
-    World world;
+    ArrayList<Team> testTeams = new ArrayList<>();
+    Worldlog worldlog;
 
     @BeforeEach
-    void runBefore() throws IOException {
-        world = new World();
+    void runBefore() {
         Team team1 = new Team();
         team1.setTeamname("Test");
-        world.worldlog.add(team1);
-        world.worldlog.add(team1);
+        testTeams.add(team1);
+        testTeams.add(team1);
+        worldlog = new Worldlog(testTeams);
     }
 
     @Test
     void testLoad() throws IOException, ClassNotFoundException {
-        String worldlog1 = world.worldlog.toString();
-        world.save();
-        world.load();
-        String worldlog2 = world.worldlog.toString();
+        String worldlog1 = worldlog.getCurrentTeams().toString();
+        worldlog.save();
+        worldlog.load();
+        String worldlog2 = worldlog.getCurrentTeams().toString();
         assertEquals(worldlog1,worldlog2);
     }
 
