@@ -34,8 +34,31 @@ public class World implements Serializable {
         int selection;
 
         while (true) {
-            System.out.println("Please select an option: \n 1 Add a new team  "
-                    + "\n 2 Delete a team \n 3 Review all teams \n 4 Load\n 5 Save \n 6 Quit");
+            System.out.println("Please select an option: \n 1 Team Management  "
+                    + "\n 2 Load\n 3 Save \n 4 Quit");
+            selection = scanner.nextInt();
+            if (selection == 1) {
+                teamMenu();
+            }
+
+            if (selection == 2) {
+                load();
+            }
+            if (selection == 3) {
+                save();
+            }
+            if (selection == 4) {
+                break;
+            }
+        }
+
+    }
+
+    private void teamMenu() {
+        int selection;
+        while (true) {
+            System.out.println("Please select an option: \n 1 Add a new team"
+                               + "\n 2 Delete a team \n 3 Review all teams \n 4 Back");
             selection = scanner.nextInt();
             if (selection == 1) {
                 newTeam();
@@ -47,16 +70,10 @@ public class World implements Serializable {
                 System.out.println("All teams:" + currentTeams);
             }
             if (selection == 4) {
-                load();
-            }
-            if (selection == 5) {
-                save();
-            }
-            if (selection == 6) {
                 break;
             }
-        }
 
+        }
     }
 
     //generate a new team based on user input
@@ -77,22 +94,12 @@ public class World implements Serializable {
         while (true) {
             System.out.println("Please select an option (add player or quit):");
             input = scanner.nextLine();
-            System.out.println("you selected: " + input);
 
             if (input.equals("quit")) {
                 break;
             }
 
-            int x = interval + (int) (Math.random() * ((10 - 1) + 1)) + 1;
-            int y = interval + (int) (Math.random() * ((10 - 1) + 1)) + 1;
-            int z = interval + (int) (Math.random() * ((10 - 1) + 1)) + 1;
-
-            Player candidate1 = allplayers.get(x);
-            Player candidate2 = allplayers.get(y);
-            Player candidate3 = allplayers.get(z);
-
-            System.out.println("Please enter the player ID");
-            System.out.println(candidate1 + "" + candidate2 + "" + candidate3);
+            randomDraft(interval);
             selection = scanner.nextInt();
             scanner.nextLine();
             team.addplayer(allplayers.get(selection - 1));
@@ -102,6 +109,19 @@ public class World implements Serializable {
 
         System.out.println("The team you have assembled:" + team.getTeamname() + "" + team.getTeamplayers());
         currentTeams.add(team);
+    }
+
+    private void randomDraft(int interval) {
+        int x = interval + (int) (Math.random() * ((10 - 1) + 1)) + 1;
+        int y = interval + (int) (Math.random() * ((10 - 1) + 1)) + 1;
+        int z = interval + (int) (Math.random() * ((10 - 1) + 1)) + 1;
+
+        Player candidate1 = allplayers.get(x);
+        Player candidate2 = allplayers.get(y);
+        Player candidate3 = allplayers.get(z);
+
+        System.out.println("Please enter the player ID");
+        System.out.println(candidate1 + "" + candidate2 + "" + candidate3);
     }
 
     //delete a team based on user input
