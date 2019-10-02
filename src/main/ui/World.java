@@ -81,17 +81,14 @@ public class World implements Serializable {
     //MODIFIES: this team player
     //EFFECTS: create a new team object
     private void newTeam() {
-        String input;
-        int selection;
-        int interval = 0;
 
         Team team = new Team();
         scanner.nextLine();
         System.out.println("Please enter your team name:");
-        input = scanner.nextLine();
+        String input = scanner.nextLine();
         team.setTeamname(input);
 
-        while (true) {
+        for (int i = 0; i < 190; i = i + 10) {
             System.out.println("Please select an option (add player or quit):");
             input = scanner.nextLine();
 
@@ -99,11 +96,10 @@ public class World implements Serializable {
                 break;
             }
 
-            randomDraft(interval);
-            selection = scanner.nextInt();
+            randomDraft(i);
+            int selection = scanner.nextInt();
             scanner.nextLine();
             team.addplayer(allplayers.get(selection - 1));
-            interval = interval + 10;
 
         }
 
@@ -111,10 +107,10 @@ public class World implements Serializable {
         currentTeams.add(team);
     }
 
-    private void randomDraft(int interval) {
-        int x = interval + (int) (Math.random() * ((10 - 1) + 1)) + 1;
-        int y = interval + (int) (Math.random() * ((10 - 1) + 1)) + 1;
-        int z = interval + (int) (Math.random() * ((10 - 1) + 1)) + 1;
+    private void randomDraft(int i) {
+        int x = i + (int) (Math.random() * ((10 - 1) + 1)) + 1;
+        int y = i + (int) (Math.random() * ((10 - 1) + 1)) + 1;
+        int z = i + (int) (Math.random() * ((10 - 1) + 1)) + 1;
 
         Player candidate1 = allplayers.get(x);
         Player candidate2 = allplayers.get(y);
