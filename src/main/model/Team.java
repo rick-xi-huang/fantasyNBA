@@ -9,6 +9,7 @@ public class Team implements Serializable {
 
     private ArrayList<Player> teamplayers;
     private String teamname;
+    private int teamPower;
 
     //construct a new team
     //MODIFIES: this
@@ -50,8 +51,14 @@ public class Team implements Serializable {
     //covert to String output
     //EFFECTS: return String for printing statement
     public String toString() {
-        return teamname + "   " + teamplayers;
+        return teamname + "   " + teamplayers + "\n";
     }
 
+    public int teamPower() {
+        for (Player player : teamplayers) {
+            teamPower = (int) (teamPower + player.getOverall());
+        }
+        return teamPower;
+    }
 
 }

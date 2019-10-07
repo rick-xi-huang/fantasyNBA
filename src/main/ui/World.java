@@ -1,6 +1,7 @@
 package ui;
 
 import data.Worldlog;
+import event.Match;
 import model.Player;
 import model.Playerpool;
 import model.Team;
@@ -35,21 +36,21 @@ public class World implements Serializable {
 
         while (true) {
             System.out.println("Please select an option: \n 1 Team Management  "
-                    + "\n 2 Load\n 3 Save \n 4 Quit");
+                    + "\n 2 Event\n 3 Data \n 4 Quit");
             selection = scanner.nextInt();
             if (selection == 1) {
                 teamMenu();
             }
-
             if (selection == 2) {
-                load();
+                eventMenu();
             }
             if (selection == 3) {
-                save();
+                dataMenu();
             }
             if (selection == 4) {
                 break;
             }
+
         }
 
     }
@@ -57,8 +58,7 @@ public class World implements Serializable {
     private void teamMenu() {
         int selection;
         while (true) {
-            System.out.println("Please select an option: \n 1 Add a new team"
-                               + "\n 2 Delete a team \n 3 Review all teams \n 4 Back");
+            System.out.println("\n 1 Add a new team \n 2 Delete a team \n 3 Review all teams \n 4 Back");
             selection = scanner.nextInt();
             if (selection == 1) {
                 newTeam();
@@ -76,6 +76,47 @@ public class World implements Serializable {
         }
     }
 
+    private void eventMenu() {
+        int selection;
+        while (true) {
+            System.out.println("\n 1 New Match Day\n 2  \n 3  \n 4 Back");
+            selection = scanner.nextInt();
+            if (selection == 1) {
+                Match match = new Match(currentTeams);
+                match.allTeamsEvent();
+            }
+            if (selection == 2) {
+                break;
+            }
+            if (selection == 3) {
+                break;
+            }
+            if (selection == 4) {
+                break;
+            }
+
+        }
+    }
+
+    private void dataMenu() throws IOException, ClassNotFoundException {
+        int selection;
+        while (true) {
+            System.out.println("\n 1 Load \n 2 Save \n 3 Back");
+            selection = scanner.nextInt();
+            if (selection == 1) {
+                load();
+            }
+            if (selection == 2) {
+                save();
+            }
+            if (selection == 3) {
+                break;
+            }
+
+        }
+
+    }
+
     //generate a new team based on user input
     //REQUIRES: correct user input
     //MODIFIES: this team player
@@ -83,18 +124,12 @@ public class World implements Serializable {
     private void newTeam() {
 
         Team team = new Team();
-        scanner.nextLine();
         System.out.println("Please enter your team name:");
+        scanner.nextLine();
         String input = scanner.nextLine();
         team.setTeamname(input);
 
-        for (int i = 0; i < 190; i = i + 10) {
-            System.out.println("Please select an option (add player or quit):");
-            input = scanner.nextLine();
-
-            if (input.equals("quit")) {
-                break;
-            }
+        for (int i = 0; i < 50; i = i + 10) {
 
             randomDraft(i);
             int selection = scanner.nextInt();
