@@ -35,6 +35,10 @@ public class Team implements Serializable {
         teamplayers.add(player);
     }
 
+    public void removeplayer(Player player) {
+        teamplayers.remove(player);
+    }
+
     //get the teamname of the team
     //EFFECTS: return the teamname of the team
     public String getTeamname() {

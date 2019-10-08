@@ -10,19 +10,30 @@ public class Match extends Event {
         super(currentTeams);
     }
 
-    @Override
-    void twoTeamsEvent(Team team1, Team team2) {
+
+    public void allTeamsMatch() {
+        for (int i = 0; i < teamNum; i++) {
+
+            for (int j = i + 1; j < teamNum; j++) {
+
+                twoTeamsMatch(currentTeams.get(i), currentTeams.get(j));
+
+            }
+
+        }
+
+        eventMessage();
+
+    }
+
+    private void twoTeamsMatch(Team team1, Team team2) {
 
         if ((team1.teamPower() * Math.random()) > (team2.teamPower() * Math.random())) {
-            System.out.println(team1.getTeamname() + " won the match against " + team2.getTeamname());
+            eventlog = eventlog + team1.getTeamname() + " won the match against " + team2.getTeamname() + "\n";
         } else {
-            System.out.println(team2.getTeamname() + " won the match against " + team1.getTeamname());
+            eventlog = eventlog + team2.getTeamname() + " won the match against " + team1.getTeamname() + "\n";
         }
 
     }
 
-    @Override
-    void resultMessage() {
-        System.out.println(" All matches completed! ");
-    }
 }

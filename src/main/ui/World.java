@@ -83,7 +83,7 @@ public class World implements Serializable {
             selection = scanner.nextInt();
             if (selection == 1) {
                 Match match = new Match(currentTeams);
-                match.allTeamsEvent();
+                match.allTeamsMatch();
             }
             if (selection == 2) {
                 break;
