@@ -14,7 +14,7 @@ public class Playerpool {
     ArrayList<Player> allplayers;
 
     //load player information from the player pool
-    //REQUIRES: NBApool.csv in correct format
+    //REQUIRES: NBApool.csv in correct format in the data folder
     //MODIFIES: this
     //EFFECTS: store all player information in the playerpool object field
 
