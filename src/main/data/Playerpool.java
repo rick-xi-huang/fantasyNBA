@@ -1,4 +1,4 @@
-package ui;
+package data;
 
 import model.Player;
 
@@ -21,7 +21,7 @@ public class Playerpool {
     public Playerpool() throws IOException {
         allplayers = new ArrayList<Player>();
 
-        List<String> lines = Files.readAllLines(Paths.get("NBApool.csv"));
+        List<String> lines = Files.readAllLines(Paths.get("data/NBApool.csv"));
 
         for (String line : lines) {
             ArrayList<String> partsOfLine = splitOnSpace(line);
