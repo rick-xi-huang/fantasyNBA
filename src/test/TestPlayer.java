@@ -38,4 +38,9 @@ class TestPlayer {
         assertEquals(player.getOverall(), 90);
     }
 
+    @Test
+    void testToString() {
+        assertEquals(player.toString(), "(1) James 88.0");
+    }
+
 }

@@ -11,7 +11,7 @@ public abstract class Event {
     protected ArrayList<Team> currentTeams;
     protected int teamNum;
     protected String date;
-    protected String eventlog;
+    public String eventlog;
 
 
     public Event(ArrayList<Team> currentTeams) {

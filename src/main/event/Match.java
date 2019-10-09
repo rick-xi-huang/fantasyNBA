@@ -26,7 +26,7 @@ public class Match extends Event {
 
     }
 
-    private void twoTeamsMatch(Team team1, Team team2) {
+    public void twoTeamsMatch(Team team1, Team team2) {
 
         if ((team1.teamPower() * Math.random()) > (team2.teamPower() * Math.random())) {
             eventlog = eventlog + team1.getTeamname() + " won the match against " + team2.getTeamname() + "\n";

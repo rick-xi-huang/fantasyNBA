@@ -1,4 +1,6 @@
-package model;
+package ui;
+
+import model.Player;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,9 +25,9 @@ public class Playerpool {
 
         for (String line : lines) {
             ArrayList<String> partsOfLine = splitOnSpace(line);
-            System.out.print("ID: " + partsOfLine.get(0) + " ");
-            System.out.print("Name: " + partsOfLine.get(1) + " ");
-            System.out.println("Overall: " + partsOfLine.get(15));
+            //System.out.print("ID: " + partsOfLine.get(0) + " ");
+            //System.out.print("Name: " + partsOfLine.get(1) + " ");
+            //System.out.println("Overall: " + partsOfLine.get(15));
             Player player = new Player(Integer.parseInt(partsOfLine.get(0)),
                     partsOfLine.get(1), Double.parseDouble(partsOfLine.get(15)));
             allplayers.add(player);

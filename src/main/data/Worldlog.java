@@ -21,10 +21,6 @@ public class Worldlog implements Serializable,Loadable,Saveable {
         return currentTeams;
     }
 
-    public void setCurrentTeams(ArrayList<Team> currentTeams) {
-        this.currentTeams = currentTeams;
-    }
-
     @Override
     public void load() throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream("t.tmp");

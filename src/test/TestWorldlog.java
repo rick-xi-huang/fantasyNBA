@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestLoadable {
+class TestWorldlog {
 
     ArrayList<Team> testTeams = new ArrayList<>();
     Worldlog worldlog;
@@ -20,6 +20,12 @@ class TestLoadable {
         testTeams.add(team1);
         testTeams.add(team1);
         worldlog = new Worldlog(testTeams);
+    }
+
+    @Test
+    void testWorldlog(){
+        worldlog = new Worldlog();
+        assertEquals(worldlog.currentTeams.size(),0);
     }
 
     @Test

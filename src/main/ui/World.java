@@ -3,7 +3,6 @@ package ui;
 import data.Worldlog;
 import event.Match;
 import model.Player;
-import model.Playerpool;
 import model.Team;
 
 import java.io.*;

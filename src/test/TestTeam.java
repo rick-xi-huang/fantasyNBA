@@ -3,6 +3,8 @@ import model.Team;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
@@ -44,8 +46,41 @@ class TestTeam {
     }
 
     @Test
-    void testToString() {
-        assertEquals(team.toString(), team.getTeamname() + "   " + team.getTeamplayers());
+    void testRemovePlayer() {
+        team.addplayer(player1);
+        team.addplayer(player2);
+        team.addplayer(player3);
+        team.removeplayer(player1);
+        assertEquals(team.getTeamplayers().size(),2);
+        assertFalse(team.getTeamplayers().contains(player1));
     }
 
+
+    @Test
+    void testSetTeamplayers(){
+        ArrayList<Player> teamplayers = new ArrayList();
+        teamplayers.add(player1);
+        teamplayers.add(player2);
+        teamplayers.add(player3);
+        team.setTeamplayers(teamplayers);
+        assertEquals(team.getTeamplayers(), teamplayers);
+    }
+
+    @Test
+    void testToString() {
+        team.setTeamname("Test");
+        team.addplayer(player1);
+        assertEquals(team.toString(), team.getTeamname() + "   " + team.getTeamplayers()+ "\n");
+    }
+
+    @Test
+    void testTeamPower() {
+        team.addplayer(player1);
+        int power = (int) player1.getOverall();
+        team.addplayer(player2);
+        power = power + (int) player2.getOverall();
+        team.addplayer(player3);
+        power = power + (int) player3.getOverall();
+        assertEquals(team.teamPower(),power);
+    }
 }
