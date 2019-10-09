@@ -27,6 +27,12 @@ class TestPlayerpool {
     }
 
     @Test
+    void testPlayerpool() throws IOException {
+        playerpool = new Playerpool();
+        assertEquals(playerpool.getallplayers().size(), 200);
+    }
+
+    @Test
     void testGetAllPlayers() {
         assertEquals(playerpool.getallplayers().size(),200);
     }
