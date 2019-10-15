@@ -1,3 +1,4 @@
+import exception.InvalidMatch;
 import model.Player;
 import model.Team;
 import event.*;
@@ -11,8 +12,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestMatch {
     Team team1;
     Team team2;
-    ArrayList<Team> allteams;
-    Match match;
+    ArrayList<Team> allteams1;
+    ArrayList<Team> allteams2;
+    Match match1;
+    Match match2;
 
     @BeforeEach
     void runBefore() {
@@ -24,30 +27,48 @@ public class TestMatch {
         team1.addplayer(new Player(2, "Player2", 90));
         team2.addplayer(new Player(3, "Player3", 90));
         team2.addplayer(new Player(4, "Player3", 90));
-        allteams = new ArrayList<>();
-        allteams.add(team1);
-        allteams.add(team2);
-        match = new Match(allteams);
+        allteams1 = new ArrayList<>();
+        allteams2 = new ArrayList<>();
+        allteams1.add(team1);
+        allteams2.add(team1);
+        allteams2.add(team2);
+        match1 = new Match(allteams1);
+        match2 = new Match(allteams2);
+
     }
 
     @Test
     void testMatch() {
-        match = new Match(allteams);
-        assertEquals(match.eventlog, "\n");
+        match1 = new Match(allteams1);
+        assertEquals(match1.eventlog, "\n");
     }
 
     @Test
-    void testallTeamsMatch() {
-        match.allTeamsMatch();
-        assertTrue(match.eventlog.contains(team1.getTeamname()));
-        assertTrue(match.eventlog.contains(team2.getTeamname()));
+    void testNewMatchWithException() {
+        try {
+            match1.allTeamsMatch();
+            fail();
+        } catch (InvalidMatch invalidMatch) {
+            invalidMatch.printStackTrace();
+        }
+    }
+
+    @Test
+    void testNewMatchWithoutException() {
+        try {
+            match2.allTeamsMatch();
+        } catch (InvalidMatch invalidMatch) {
+            fail();
+        }
+        assertTrue(match2.eventlog.contains(team1.getTeamname()));
+        assertTrue(match2.eventlog.contains(team2.getTeamname()));
     }
 
     @Test
     void testTwoTeamsMatch() {
-        match.twoTeamsMatch(team1, team2);
-        assertTrue(match.eventlog.contains(team1.getTeamname()));
-        assertTrue(match.eventlog.contains(team2.getTeamname()));
+        match2.twoTeamsMatch(team1, team2);
+        assertTrue(match2.eventlog.contains(team1.getTeamname()));
+        assertTrue(match2.eventlog.contains(team2.getTeamname()));
     }
 
 

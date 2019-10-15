@@ -3,6 +3,9 @@ package ui;
 import data.Playerpool;
 import data.Worldlog;
 import event.Match;
+import exception.InvalidInput;
+import exception.InvalidMenuSelection;
+import exception.InvalidPlayerSelection;
 import model.Player;
 import model.Team;
 
@@ -26,18 +29,15 @@ public class World implements Serializable {
 
     }
 
-    //generate a user input menu with different choices
-    //REQUIRES: correct user input
-    //MODIFIES: this team player
-    //EFFECTS: add a new team object / delete a team object / review all team objects / quit
-    private void userMenu() throws IOException, ClassNotFoundException {
 
-        int selection;
+    private void mainMenu() throws IOException, ClassNotFoundException {
+
 
         while (true) {
-            System.out.println("Please select an option: \n 1 Team Management  "
-                    + "\n 2 Event\n 3 Data \n 4 Quit");
-            selection = scanner.nextInt();
+
+            System.out.println("Please select: \n 1 Team Management \n 2 Event\n 3 Data \n 4 Quit");
+            int selection = selectionFour();
+
             if (selection == 1) {
                 teamMenu();
             }
@@ -50,16 +50,16 @@ public class World implements Serializable {
             if (selection == 4) {
                 break;
             }
-
         }
+
 
     }
 
     private void teamMenu() {
-        int selection;
+
         while (true) {
-            System.out.println("\n 1 Add a new team \n 2 Delete a team \n 3 Review all teams \n 4 Back");
-            selection = scanner.nextInt();
+            System.out.println("1 Add a new team \n 2 Delete a team \n 3 Review all teams \n 4 Back");
+            int selection = selectionFour();
             if (selection == 1) {
                 newTeam();
             }
@@ -77,13 +77,13 @@ public class World implements Serializable {
     }
 
     private void eventMenu() {
-        int selection;
+
         while (true) {
-            System.out.println("\n 1 New Match Day\n 2  \n 3  \n 4 Back");
-            selection = scanner.nextInt();
+            System.out.println("1 New Match Day\n 2  \n 3  \n 4 Back");
+            int selection = selectionFour();
             if (selection == 1) {
                 Match match = new Match(currentTeams);
-                match.allTeamsMatch();
+                match.newMatch();
             }
             if (selection == 2) {
                 break;
@@ -99,10 +99,10 @@ public class World implements Serializable {
     }
 
     private void dataMenu() throws IOException, ClassNotFoundException {
-        int selection;
+
         while (true) {
-            System.out.println("\n 1 Load \n 2 Save \n 3 Back");
-            selection = scanner.nextInt();
+            System.out.println("1 Load \n 2 Save \n 3 Back");
+            int selection = selectionFour();
             if (selection == 1) {
                 load();
             }
@@ -131,8 +131,7 @@ public class World implements Serializable {
 
         for (int i = 0; i < 50; i = i + 10) {
 
-            randomDraft(i);
-            int selection = scanner.nextInt();
+            int selection = selectionplayer(randomDraft(i));
             scanner.nextLine();
             team.addplayer(allplayers.get(selection - 1));
 
@@ -142,17 +141,25 @@ public class World implements Serializable {
         currentTeams.add(team);
     }
 
-    private void randomDraft(int i) {
-        int x = i + (int) (Math.random() * ((10 - 1) + 1)) + 1;
-        int y = i + (int) (Math.random() * ((10 - 1) + 1)) + 1;
-        int z = i + (int) (Math.random() * ((10 - 1) + 1)) + 1;
+    private ArrayList<Integer> randomDraft(int i) {
 
-        Player candidate1 = allplayers.get(x);
-        Player candidate2 = allplayers.get(y);
-        Player candidate3 = allplayers.get(z);
+        ArrayList<Integer> smallpool = new ArrayList<>();
+
+        int x = i + (int) (Math.random() * ((10 - 1) + 1)) + 1;
+        smallpool.add(x);
+        int y = i + (int) (Math.random() * ((10 - 1) + 1)) + 1;
+        smallpool.add(y);
+        int z = i + (int) (Math.random() * ((10 - 1) + 1)) + 1;
+        smallpool.add(z);
+
+        Player candidate1 = allplayers.get(x - 1);
+        Player candidate2 = allplayers.get(y - 1);
+        Player candidate3 = allplayers.get(z - 1);
 
         System.out.println("Please enter the player ID");
         System.out.println(candidate1 + "" + candidate2 + "" + candidate3);
+
+        return smallpool;
     }
 
     //delete a team based on user input
@@ -182,6 +189,47 @@ public class World implements Serializable {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         World world = new World();
-        world.userMenu();
+        world.mainMenu();
     }
+
+
+    private int selectionFour() {
+
+        int selection = 0;
+
+        try {
+            selection = scanner.nextInt();
+            if (!(selection == 1 || selection == 2 || selection == 3 || selection == 4)) {
+                throw new InvalidMenuSelection();
+            }
+        } catch (InvalidInput e) {
+            System.out.println("Invalid Input");
+        } finally {
+            System.out.println("Thanks for playing");
+        }
+
+        return selection;
+
+    }
+
+    private int selectionplayer(ArrayList<Integer> list) {
+
+        int selection = 0;
+
+        try {
+            selection = scanner.nextInt();
+
+            if (!list.contains(selection)) {
+                throw new InvalidPlayerSelection();
+            }
+        } catch (InvalidInput e) {
+            System.out.println("Invalid Input");
+            newTeam();
+        }
+
+        return selection;
+
+    }
+
+
 }

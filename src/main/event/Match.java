@@ -1,5 +1,6 @@
 package event;
 
+import exception.InvalidMatch;
 import model.Team;
 
 import java.util.ArrayList;
@@ -11,7 +12,25 @@ public class Match extends Event {
     }
 
 
-    public void allTeamsMatch() {
+    public void newMatch() {
+
+        try {
+            allTeamsMatch();
+        } catch (InvalidMatch e) {
+            System.out.println("Not enough teams");
+        } finally {
+            eventMessage();
+        }
+
+    }
+
+
+    public void allTeamsMatch() throws InvalidMatch {
+
+        if (currentTeams.size() < 2) {
+            throw new InvalidMatch();
+        }
+
         for (int i = 0; i < teamNum; i++) {
 
             for (int j = i + 1; j < teamNum; j++) {
@@ -19,10 +38,7 @@ public class Match extends Event {
                 twoTeamsMatch(currentTeams.get(i), currentTeams.get(j));
 
             }
-
         }
-
-        eventMessage();
 
     }
 
