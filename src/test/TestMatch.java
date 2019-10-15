@@ -43,8 +43,18 @@ public class TestMatch {
         assertEquals(match1.eventlog, "\n");
     }
 
+
     @Test
     void testNewMatchWithException() {
+        match1.newMatch();
+        assertFalse(match1.eventlog.contains(team1.getTeamname()));
+        match2.newMatch();
+        assertTrue(match2.eventlog.contains(team1.getTeamname()));
+    }
+
+
+    @Test
+    void testAllTeamsMatchWithException() {
         try {
             match1.allTeamsMatch();
             fail();
@@ -54,7 +64,7 @@ public class TestMatch {
     }
 
     @Test
-    void testNewMatchWithoutException() {
+    void testAllTeamsMatchWithoutException() {
         try {
             match2.allTeamsMatch();
         } catch (InvalidMatch invalidMatch) {
