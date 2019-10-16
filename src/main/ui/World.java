@@ -58,7 +58,7 @@ public class World implements Serializable {
     private void teamMenu() {
 
         while (true) {
-            System.out.println("1 Add a new team \n 2 Delete a team \n 3 Review all teams \n 4 Back");
+            System.out.println(" 1 Add a new team \n 2 Delete a team \n 3 Review all teams \n 4 Back");
             int selection = selectionFour();
             if (selection == 1) {
                 newTeam();
@@ -79,7 +79,7 @@ public class World implements Serializable {
     private void eventMenu() {
 
         while (true) {
-            System.out.println("1 New Match Day\n 2  \n 3  \n 4 Back");
+            System.out.println(" 1 New Match Day\n 2  \n 3  \n 4 Back");
             int selection = selectionFour();
             if (selection == 1) {
                 Match match = new Match(currentTeams);
@@ -101,7 +101,7 @@ public class World implements Serializable {
     private void dataMenu() throws IOException, ClassNotFoundException {
 
         while (true) {
-            System.out.println("1 Load \n 2 Save \n 3 Back");
+            System.out.println(" 1 Load \n 2 Save \n 3 Back");
             int selection = selectionFour();
             if (selection == 1) {
                 load();

@@ -5,12 +5,12 @@ import model.Team;
 import java.io.*;
 import java.util.ArrayList;
 
-public class Worldlog implements Serializable,Loadable,Saveable {
+public class Worldlog implements Serializable, Loadable, Saveable {
 
     public ArrayList<Team> currentTeams;
 
 
-    public Worldlog(){
+    public Worldlog() {
     }
 
     public Worldlog(ArrayList<Team> currentTeams) {
@@ -22,11 +22,16 @@ public class Worldlog implements Serializable,Loadable,Saveable {
     }
 
     @Override
-    public void load() throws IOException, ClassNotFoundException {
-        FileInputStream fis = new FileInputStream("t.tmp");
-        ObjectInputStream ois = new ObjectInputStream(fis);
-        currentTeams = (ArrayList<Team>) ois.readObject();
-        ois.close();
+    public void load() throws IOException {
+        try {
+            FileInputStream fis = new FileInputStream("t.tmp");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            currentTeams = (ArrayList<Team>) ois.readObject();
+            ois.close();
+        } catch (FileNotFoundException | ClassNotFoundException e) {
+            System.out.println("No file available for load");
+        }
+
     }
 
     @Override

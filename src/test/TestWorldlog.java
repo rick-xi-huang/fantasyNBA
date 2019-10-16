@@ -23,19 +23,29 @@ class TestWorldlog {
     }
 
     @Test
-    void testWorldlog(){
-        worldlog = new Worldlog();
-        assertEquals(worldlog.currentTeams.size(),0);
+    void testWorldlog() {
+        worldlog = new Worldlog(testTeams);
+        assertEquals(worldlog.currentTeams.size(), 2);
+    }
+
+
+    @Test
+    void testLoadWithException() throws IOException {
+        String worldlog1 = worldlog.getCurrentTeams().toString();
+        worldlog.load();
+        String worldlog2 = worldlog.getCurrentTeams().toString();
+        assertEquals(worldlog1, worldlog2);
     }
 
     @Test
-    void testLoad() throws IOException, ClassNotFoundException {
+    void testLoadWithoutException() throws IOException {
         String worldlog1 = worldlog.getCurrentTeams().toString();
         worldlog.save();
         worldlog.load();
         String worldlog2 = worldlog.getCurrentTeams().toString();
-        assertEquals(worldlog1,worldlog2);
+        assertEquals(worldlog1, worldlog2);
     }
+
 
 }
 
