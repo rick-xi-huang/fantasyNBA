@@ -1,5 +1,6 @@
 package data;
 
+import model.Player;
 import model.Team;
 
 import java.io.*;
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 public class Worldlog implements Serializable, Loadable, Saveable {
 
     public ArrayList<Team> currentTeams;
-
 
     public Worldlog() {
     }
@@ -30,6 +30,7 @@ public class Worldlog implements Serializable, Loadable, Saveable {
             ois.close();
         } catch (FileNotFoundException | ClassNotFoundException e) {
             System.out.println("No file available for load");
+            currentTeams = new ArrayList<>();
         }
 
     }
@@ -41,4 +42,5 @@ public class Worldlog implements Serializable, Loadable, Saveable {
         oos.writeObject(currentTeams);
         oos.close();
     }
+
 }

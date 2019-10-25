@@ -172,7 +172,7 @@ public class World implements Serializable {
         currentTeams.remove(choice);
     }
 
-    public void load() throws IOException, ClassNotFoundException {
+    public void load() throws IOException {
 
         Worldlog worldlog = new Worldlog();
         worldlog.load();
