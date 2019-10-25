@@ -3,6 +3,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Team implements Serializable {
 
@@ -31,7 +32,10 @@ public class Team implements Serializable {
     //MODIFIES: this
     //EFFECTS: add a new player object to ArrayList teamplayers
     public void addplayer(Player player) {
-        teamplayers.add(player);
+        if (!teamplayers.contains(player)) {
+            teamplayers.add(player);
+            player.setTeam(this);
+        }
     }
 
     public void removeplayer(Player player) {
@@ -64,4 +68,22 @@ public class Team implements Serializable {
         return teamPower;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Team team = (Team) o;
+        return teamPower == team.teamPower
+                && Objects.equals(teamplayers, team.teamplayers)
+                && Objects.equals(teamname, team.teamname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(teamplayers, teamname, teamPower);
+    }
 }

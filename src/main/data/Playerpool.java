@@ -7,11 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class Playerpool {
 
-    ArrayList<Player> allplayers;
+    private HashMap<Integer,Player> allplayers;
 
     //load player information from the player pool
     //REQUIRES: NBApool.csv in correct format in the data folder
@@ -19,10 +20,11 @@ public class Playerpool {
     //EFFECTS: store all player information in the playerpool object field
 
     public Playerpool() throws IOException {
-        allplayers = new ArrayList<Player>();
+        allplayers = new HashMap<>();
 
         List<String> lines = Files.readAllLines(Paths.get("data/NBApool.csv"));
 
+        int i = 0;
         for (String line : lines) {
             ArrayList<String> partsOfLine = splitOnSpace(line);
             //System.out.print("ID: " + partsOfLine.get(0) + " ");
@@ -30,8 +32,8 @@ public class Playerpool {
             //System.out.println("Overall: " + partsOfLine.get(15));
             Player player = new Player(Integer.parseInt(partsOfLine.get(0)),
                     partsOfLine.get(1), Double.parseDouble(partsOfLine.get(15)));
-            allplayers.add(player);
-
+            allplayers.put(i,player);
+            i++;
         }
     }
 
@@ -43,7 +45,7 @@ public class Playerpool {
     //obtain all player information the playerpool object
     //EFFECTS: return all player information as an ArrayList of player objects
 
-    public ArrayList<Player> getallplayers() {
+    public HashMap<Integer, Player> getallplayers() {
         return allplayers;
     }
 

@@ -11,13 +11,14 @@ import model.Team;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class World implements Serializable {
 
     private ArrayList<Team> currentTeams;
     private Scanner scanner;
-    private ArrayList<Player> allplayers;
+    private HashMap<Integer,Player> allplayers;
     private Playerpool playerpool;
 
     public World() throws IOException {

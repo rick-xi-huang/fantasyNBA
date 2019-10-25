@@ -1,11 +1,13 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Player implements Serializable {
     private int id;
     private String name;
     private double overall;
+    private Team team;
 
     //construct a player
     //MODIFIES: this
@@ -31,6 +33,17 @@ public class Player implements Serializable {
         this.name = name;
     }
 
+    public void setTeam(Team team) {
+        if (!(this.team == team)) {
+            this.team = team;
+            team.addplayer(this);
+        }
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
     //get the overall of the player
     //EFFECTS: return the name of the player
     public double getOverall() {
@@ -50,4 +63,23 @@ public class Player implements Serializable {
         return "(" + id + ")" + " " + name + " " + overall;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Player player = (Player) o;
+        return id == player.id
+                && Double.compare(player.overall, overall) == 0
+                && Objects.equals(name, player.name)
+                && Objects.equals(team, player.team);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, overall, team);
+    }
 }
