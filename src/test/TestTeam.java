@@ -43,6 +43,7 @@ class TestTeam {
         team.addplayer(player3);
         assertEquals(team.getTeamplayers().size(),3);
         assertTrue(team.getTeamplayers().contains(player3));
+        assertEquals(player3.getTeam(),team);
     }
 
     @Test
@@ -51,6 +52,7 @@ class TestTeam {
         team.addplayer(player2);
         team.addplayer(player3);
         team.removeplayer(player1);
+        assertEquals(player1.getTeam(),null);
         assertEquals(team.getTeamplayers().size(),2);
         assertFalse(team.getTeamplayers().contains(player1));
     }
@@ -83,4 +85,20 @@ class TestTeam {
         power = power + (int) player3.getOverall();
         assertEquals(team.teamPower(),power);
     }
+
+    @Test
+    void testHashcode() {
+        Team team1 = new Team();
+        team1.setTeamname("Test1");
+        Team team2 = new Team();
+        team2.setTeamname("Test1");
+        Team team3 = new Team();
+        assertTrue(team1.equals(team2));
+        assertFalse(team1.equals(team3));
+        assertFalse(team1.equals(null));
+        assertEquals(team1.hashCode(),-1793273279);
+
+
+    }
+
 }

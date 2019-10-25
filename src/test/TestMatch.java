@@ -65,13 +65,16 @@ public class TestMatch {
 
     @Test
     void testAllTeamsMatchWithoutException() {
-        try {
-            match2.allTeamsMatch();
-        } catch (InvalidMatch invalidMatch) {
-            fail();
+
+        for (int i = 0; i < 10; i++) {
+            try {
+                match2.allTeamsMatch();
+            } catch (InvalidMatch invalidMatch) {
+                fail();
+            }
+            assertTrue(match2.eventlog.contains(team1.getTeamname()));
+            assertTrue(match2.eventlog.contains(team2.getTeamname()));
         }
-        assertTrue(match2.eventlog.contains(team1.getTeamname()));
-        assertTrue(match2.eventlog.contains(team2.getTeamname()));
     }
 
     @Test
