@@ -16,17 +16,15 @@ import java.util.Scanner;
 
 public class World implements Serializable {
 
-    private ArrayList<Team> currentTeams;
     private Scanner scanner;
-    private HashMap<Integer,Player> allplayers;
     private Playerpool playerpool;
+    private Worldlog worldlog;
 
     public World() throws IOException {
 
-        currentTeams = new ArrayList<>();
         scanner = new Scanner(System.in);
         playerpool = new Playerpool();
-        this.allplayers = playerpool.getallplayers();
+        worldlog = new Worldlog();
 
     }
 
@@ -68,7 +66,7 @@ public class World implements Serializable {
                 deleteTeam();
             }
             if (selection == 3) {
-                System.out.println("All teams:" + currentTeams);
+                System.out.println("All teams:" + worldlog.getCurrentTeams());
             }
             if (selection == 4) {
                 break;
@@ -83,7 +81,7 @@ public class World implements Serializable {
             System.out.println(" 1 New Match Day\n 2  \n 3  \n 4 Back");
             int selection = selectionFour();
             if (selection == 1) {
-                Match match = new Match(currentTeams);
+                Match match = new Match(worldlog.getCurrentTeams());
                 match.newMatch();
             }
             if (selection == 2) {
@@ -134,12 +132,12 @@ public class World implements Serializable {
 
             int selection = selectionplayer(randomDraft(i));
             scanner.nextLine();
-            team.addplayer(allplayers.get(selection - 1));
+            team.addplayer(playerpool.getPlayer(selection - 1));
 
         }
 
         System.out.println("The team you have assembled:" + team.getTeamname() + "" + team.getTeamplayers());
-        currentTeams.add(team);
+        worldlog.addTeam(team);
     }
 
     private ArrayList<Integer> randomDraft(int i) {
@@ -153,9 +151,9 @@ public class World implements Serializable {
         int z = i + (int) (Math.random() * ((10 - 1) + 1)) + 1;
         smallpool.add(z);
 
-        Player candidate1 = allplayers.get(x - 1);
-        Player candidate2 = allplayers.get(y - 1);
-        Player candidate3 = allplayers.get(z - 1);
+        Player candidate1 = playerpool.getPlayer(x - 1);
+        Player candidate2 = playerpool.getPlayer(y - 1);
+        Player candidate3 = playerpool.getPlayer(z - 1);
 
         System.out.println("Please enter the player ID");
         System.out.println(candidate1 + "" + candidate2 + "" + candidate3);
@@ -168,22 +166,17 @@ public class World implements Serializable {
     //MODIFIES: this
     //EFFECTS: remove a team object from currentTeams
     private void deleteTeam() {
-        System.out.println("All teams:" + currentTeams + "\n Please select the team to delete");
+        System.out.println("All teams:" + worldlog.getCurrentTeams() + "\n Please select the team to delete");
         int choice = scanner.nextInt();
-        currentTeams.remove(choice);
+        worldlog.removeTeam(worldlog.getTeam(choice));
     }
 
     public void load() throws IOException {
-
-        Worldlog worldlog = new Worldlog();
         worldlog.load();
-        currentTeams = worldlog.getCurrentTeams();
     }
 
 
     public void save() throws IOException {
-
-        Worldlog worldlog = new Worldlog(currentTeams);
         worldlog.save();
     }
 
@@ -223,13 +216,12 @@ public class World implements Serializable {
             if (!list.contains(selection)) {
                 throw new InvalidPlayerSelection();
             }
+
         } catch (InvalidInput e) {
             System.out.println("Invalid Input");
-            newTeam();
         }
 
         return selection;
-
     }
 
 

@@ -30,4 +30,9 @@ class TestPlayerpool {
         assertEquals(playerpool.getallplayers().size(),200);
     }
 
+    @Test
+    void testGetPlayer() {
+        assertEquals(playerpool.getPlayer(0),playerpool.getallplayers().get(0));
+    }
+
 }

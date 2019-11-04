@@ -11,10 +11,7 @@ public class Worldlog implements Serializable, Loadable, Saveable {
     public ArrayList<Team> currentTeams;
 
     public Worldlog() {
-    }
-
-    public Worldlog(ArrayList<Team> currentTeams) {
-        this.currentTeams = currentTeams;
+        currentTeams = new ArrayList<>();
     }
 
     public ArrayList<Team> getCurrentTeams() {
@@ -41,6 +38,18 @@ public class Worldlog implements Serializable, Loadable, Saveable {
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(currentTeams);
         oos.close();
+    }
+
+    public void addTeam(Team team) {
+        currentTeams.add(team);
+    }
+
+    public void removeTeam(Team team) {
+        currentTeams.remove(team);
+    }
+
+    public Team getTeam(int choice) {
+        return currentTeams.get(choice);
     }
 
 }

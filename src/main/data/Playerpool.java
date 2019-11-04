@@ -49,4 +49,8 @@ public class Playerpool {
         return allplayers;
     }
 
+    public Player getPlayer(int key) {
+        return allplayers.get(key);
+    }
+
 }

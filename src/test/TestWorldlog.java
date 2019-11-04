@@ -10,22 +10,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestWorldlog {
 
-    ArrayList<Team> testTeams = new ArrayList<>();
     Worldlog worldlog;
+    Team team1;
+    Team team2;
 
     @BeforeEach
     void runBefore() {
-        Team team1 = new Team();
-        team1.setTeamname("Test");
-        testTeams.add(team1);
-        testTeams.add(team1);
-        worldlog = new Worldlog(testTeams);
+        team1 = new Team();
+        team1.setTeamname("Test1");
+        team2 = new Team();
+        team2.setTeamname("Test2");
+        worldlog = new Worldlog();
+        worldlog.addTeam(team1);
+        worldlog.addTeam(team2);
     }
 
     @Test
     void testWorldlog() {
-        worldlog = new Worldlog(testTeams);
-        assertEquals(worldlog.currentTeams.size(), 2);
+        assertEquals(worldlog.getCurrentTeams().size(), 2);
     }
 
 
@@ -46,6 +48,16 @@ class TestWorldlog {
         assertEquals(worldlog1, worldlog2);
     }
 
+    @Test
+    void testGetTeam() {
+        assertEquals(worldlog.getTeam(0),team1);
+    }
+
+    @Test
+    void testRemoveTeam() {
+        worldlog.removeTeam(team2);
+        assertFalse(worldlog.getCurrentTeams().contains(team2));
+    }
 
 }
 
