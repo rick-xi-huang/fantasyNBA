@@ -40,6 +40,13 @@ public class Player implements Serializable {
         }
     }
 
+    public void removeTeam() {
+        if (!(this.team == null)) {
+            this.team.removeplayer(this);
+            this.team = null;
+        }
+    }
+
     public Team getTeam() {
         return team;
     }

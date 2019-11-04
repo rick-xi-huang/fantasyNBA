@@ -39,7 +39,10 @@ public class Team implements Serializable {
     }
 
     public void removeplayer(Player player) {
-        teamplayers.remove(player);
+        if (teamplayers.contains(player)) {
+            teamplayers.remove(player);
+            player.removeTeam();
+        }
     }
 
     //get the teamname of the team

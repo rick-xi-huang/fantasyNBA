@@ -10,10 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class TestPlayer {
 
     private Player player;
+    private Team team;
 
     @BeforeEach
     void runBefore() {
         player = new Player(1, "James", 88);
+        team = new Team();
     }
 
     @Test
@@ -33,6 +35,23 @@ class TestPlayer {
     }
 
     @Test
+    void testSetTeam() {
+        player.setTeam(team);
+        assertEquals(player.getTeam(),team);
+        assertTrue(team.getTeamplayers().contains(player));
+    }
+
+    @Test
+    void removeTeam() {
+        player.setTeam(team);
+        assertEquals(player.getTeam(),team);
+        player.removeTeam();
+        assertEquals(player.getTeam(),null);
+        assertFalse(team.getTeamplayers().contains(player));
+    }
+
+
+    @Test
     void testSetOverall() {
         player.setOverall(90);
         assertEquals(player.getOverall(), 90);
@@ -41,6 +60,17 @@ class TestPlayer {
     @Test
     void testToString() {
         assertEquals(player.toString(), "(1) James 88.0");
+    }
+
+    @Test
+    void testHashcode() {
+        Player player1 = new Player(1, "James", 88);
+        Player player2 = new Player(1, "James", 88);
+        Player player3 = new Player(1, "James", 90);
+        assertTrue(player1.equals(player2));
+        assertFalse(player1.equals(player3));
+        assertFalse(player1.equals(null));
+        assertEquals(player1.hashCode(), -1061463036);
     }
 
 }
