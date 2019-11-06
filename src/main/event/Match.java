@@ -45,9 +45,9 @@ public class Match extends Event {
     public void twoTeamsMatch(Team team1, Team team2) {
 
         if ((team1.teamPower() * Math.random()) > (team2.teamPower() * Math.random())) {
-            eventlog = eventlog + team1.getTeamname() + " won the match against " + team2.getTeamname() + "\n";
+            event = event + team1.getTeamname() + " won the match against " + team2.getTeamname() + "\n";
         } else {
-            eventlog = eventlog + team2.getTeamname() + " won the match against " + team1.getTeamname() + "\n";
+            event = event + team2.getTeamname() + " won the match against " + team1.getTeamname() + "\n";
         }
 
     }

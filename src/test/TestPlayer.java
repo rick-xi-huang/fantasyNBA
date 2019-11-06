@@ -67,9 +67,11 @@ class TestPlayer {
         Player player1 = new Player(1, "James", 88);
         Player player2 = new Player(1, "James", 88);
         Player player3 = new Player(1, "James", 90);
+        assertTrue(player1.equals(player1));
         assertTrue(player1.equals(player2));
         assertFalse(player1.equals(player3));
         assertFalse(player1.equals(null));
+        assertFalse(player1.equals(team));
         assertEquals(player1.hashCode(), -1061463036);
     }
 

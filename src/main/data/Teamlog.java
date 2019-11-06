@@ -6,11 +6,11 @@ import model.Team;
 import java.io.*;
 import java.util.ArrayList;
 
-public class Worldlog implements Serializable, Loadable, Saveable {
+public class Teamlog implements Serializable, Loadable, Saveable {
 
     public ArrayList<Team> currentTeams;
 
-    public Worldlog() {
+    public Teamlog() {
         currentTeams = new ArrayList<>();
     }
 

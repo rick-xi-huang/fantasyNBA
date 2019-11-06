@@ -40,16 +40,16 @@ public class TestMatch {
     @Test
     void testMatch() {
         match1 = new Match(allteams1);
-        assertEquals(match1.eventlog, "\n");
+        assertEquals(match1.getEvent(), match1.getDate()+"\n");
     }
 
 
     @Test
     void testNewMatchWithException() {
         match1.newMatch();
-        assertFalse(match1.eventlog.contains(team1.getTeamname()));
+        assertFalse(match1.getEvent().contains(team1.getTeamname()));
         match2.newMatch();
-        assertTrue(match2.eventlog.contains(team1.getTeamname()));
+        assertTrue(match2.getEvent().contains(team1.getTeamname()));
     }
 
 
@@ -72,16 +72,16 @@ public class TestMatch {
             } catch (InvalidMatch invalidMatch) {
                 fail();
             }
-            assertTrue(match2.eventlog.contains(team1.getTeamname()));
-            assertTrue(match2.eventlog.contains(team2.getTeamname()));
+            assertTrue(match2.getEvent().contains(team1.getTeamname()));
+            assertTrue(match2.getEvent().contains(team2.getTeamname()));
         }
     }
 
     @Test
     void testTwoTeamsMatch() {
         match2.twoTeamsMatch(team1, team2);
-        assertTrue(match2.eventlog.contains(team1.getTeamname()));
-        assertTrue(match2.eventlog.contains(team2.getTeamname()));
+        assertTrue(match2.getEvent().contains(team1.getTeamname()));
+        assertTrue(match2.getEvent().contains(team2.getTeamname()));
     }
 
 

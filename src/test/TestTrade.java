@@ -33,14 +33,14 @@ public class TestTrade {
     @Test
     void testTrade() {
         trade = new Trade(allteams);
-        assertEquals(trade.eventlog, "\n");
+        assertEquals(trade.event, "\n");
     }
 
     @Test
     void testPlayerExchange() {
         trade.playerExchange(team1, 1, team2, 1);
-        assertTrue(trade.eventlog.contains(team1.getTeamname()));
-        assertTrue(trade.eventlog.contains(team2.getTeamname()));
+        assertTrue(trade.event.contains(team1.getTeamname()));
+        assertTrue(trade.event.contains(team2.getTeamname()));
     }
 
 }

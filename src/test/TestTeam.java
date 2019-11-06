@@ -93,9 +93,11 @@ class TestTeam {
         Team team2 = new Team();
         team2.setTeamname("Test1");
         Team team3 = new Team();
+        assertTrue(team1.equals(team1));
         assertTrue(team1.equals(team2));
         assertFalse(team1.equals(team3));
         assertFalse(team1.equals(null));
+        assertFalse(team1.equals(player1));
         assertEquals(team1.hashCode(),-1793273279);
 
 

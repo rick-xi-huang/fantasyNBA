@@ -11,7 +11,7 @@ public abstract class Event {
     protected ArrayList<Team> currentTeams;
     protected int teamNum;
     protected String date;
-    public String eventlog;
+    public String event;
 
 
     public Event(ArrayList<Team> currentTeams) {
@@ -20,13 +20,21 @@ public abstract class Event {
         teamNum = currentTeams.size();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
         date = simpleDateFormat.format(new Date());
-        eventlog = "\n";
+        event = date + "\n";
 
     }
 
 
     public void eventMessage() {
-        System.out.println(date + "\n" + eventlog);
+        System.out.println(date + "\n" + event);
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public String getDate() {
+        return date;
     }
 
 }

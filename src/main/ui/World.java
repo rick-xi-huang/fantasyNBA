@@ -1,7 +1,8 @@
 package ui;
 
+import data.Eventlog;
 import data.Playerpool;
-import data.Worldlog;
+import data.Teamlog;
 import event.Match;
 import exception.InvalidInput;
 import exception.InvalidMenuSelection;
@@ -11,20 +12,21 @@ import model.Team;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class World implements Serializable {
 
     private Scanner scanner;
     private Playerpool playerpool;
-    private Worldlog worldlog;
+    private Teamlog teamlog;
+    private Eventlog eventlog;
 
     public World() throws IOException {
 
         scanner = new Scanner(System.in);
         playerpool = new Playerpool();
-        worldlog = new Worldlog();
+        teamlog = new Teamlog();
+        eventlog = new Eventlog();
 
     }
 
@@ -66,7 +68,7 @@ public class World implements Serializable {
                 deleteTeam();
             }
             if (selection == 3) {
-                System.out.println("All teams:" + worldlog.getCurrentTeams());
+                System.out.println("All teams:" + teamlog.getCurrentTeams());
             }
             if (selection == 4) {
                 break;
@@ -78,14 +80,15 @@ public class World implements Serializable {
     private void eventMenu() {
 
         while (true) {
-            System.out.println(" 1 New Match Day\n 2  \n 3  \n 4 Back");
+            System.out.println(" 1 New Match Day\n 2 View History \n 3  \n 4 Back");
             int selection = selectionFour();
             if (selection == 1) {
-                Match match = new Match(worldlog.getCurrentTeams());
+                Match match = new Match(teamlog.getCurrentTeams());
                 match.newMatch();
+                eventlog.addEvent(match.getEvent());
             }
             if (selection == 2) {
-                break;
+                eventlog.printAll();
             }
             if (selection == 3) {
                 break;
@@ -137,7 +140,7 @@ public class World implements Serializable {
         }
 
         System.out.println("The team you have assembled:" + team.getTeamname() + "" + team.getTeamplayers());
-        worldlog.addTeam(team);
+        teamlog.addTeam(team);
     }
 
     private ArrayList<Integer> randomDraft(int i) {
@@ -166,18 +169,20 @@ public class World implements Serializable {
     //MODIFIES: this
     //EFFECTS: remove a team object from currentTeams
     private void deleteTeam() {
-        System.out.println("All teams:" + worldlog.getCurrentTeams() + "\n Please select the team to delete");
+        System.out.println("All teams:" + teamlog.getCurrentTeams() + "\n Please select the team to delete");
         int choice = scanner.nextInt();
-        worldlog.removeTeam(worldlog.getTeam(choice));
+        teamlog.removeTeam(teamlog.getTeam(choice));
     }
 
     public void load() throws IOException {
-        worldlog.load();
+        teamlog.load();
+        eventlog.load();
     }
 
 
     public void save() throws IOException {
-        worldlog.save();
+        teamlog.save();
+        eventlog.save();
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
