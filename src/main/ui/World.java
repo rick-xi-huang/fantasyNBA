@@ -9,6 +9,7 @@ import exception.InvalidMenuSelection;
 import exception.InvalidPlayerSelection;
 import model.Player;
 import model.Team;
+import network.FantasyWebData;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -103,7 +104,7 @@ public class World implements Serializable {
     private void dataMenu() throws IOException, ClassNotFoundException {
 
         while (true) {
-            System.out.println(" 1 Load \n 2 Save \n 3 Back");
+            System.out.println(" 1 Load \n 2 Save \n 3 Web Data \n 4 Back");
             int selection = selectionFour();
             if (selection == 1) {
                 load();
@@ -112,9 +113,11 @@ public class World implements Serializable {
                 save();
             }
             if (selection == 3) {
+                teamlog.updateFromWeb();
+            }
+            if (selection == 4) {
                 break;
             }
-
         }
 
     }
@@ -203,8 +206,6 @@ public class World implements Serializable {
             }
         } catch (InvalidInput e) {
             System.out.println("Invalid Input");
-        } finally {
-            System.out.println("Thanks for playing");
         }
 
         return selection;

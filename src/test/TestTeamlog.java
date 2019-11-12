@@ -1,5 +1,6 @@
 import data.*;
 import model.*;
+import network.FantasyWebData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -56,6 +57,13 @@ class TestTeamlog {
     void testRemoveTeam() {
         teamlog.removeTeam(team2);
         assertFalse(teamlog.getCurrentTeams().contains(team2));
+    }
+
+    @Test
+    void testUpdateFromWeb() throws IOException {
+        team1.addplayer(new Playerpool().getPlayer(1));
+        teamlog.updateFromWeb();
+        assertEquals(new Playerpool().getPlayer(1).getName(), new FantasyWebData().getWebpool().get(0).getName());
     }
 
 }
