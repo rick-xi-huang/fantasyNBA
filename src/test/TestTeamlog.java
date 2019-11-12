@@ -59,12 +59,5 @@ class TestTeamlog {
         assertFalse(teamlog.getCurrentTeams().contains(team2));
     }
 
-    @Test
-    void testUpdateFromWeb() throws IOException {
-        team1.addplayer(new Playerpool().getPlayer(1));
-        teamlog.updateFromWeb();
-        assertEquals(new Playerpool().getPlayer(1).getName(), new FantasyWebData().getWebpool().get(0).getName());
-    }
-
 }
 

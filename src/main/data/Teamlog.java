@@ -10,11 +10,9 @@ import java.util.ArrayList;
 public class Teamlog implements Serializable, Loadable, Saveable {
 
     public ArrayList<Team> currentTeams;
-    FantasyWebData fantasyWebData;
 
     public Teamlog() {
         currentTeams = new ArrayList<>();
-        fantasyWebData = new FantasyWebData();
     }
 
     public ArrayList<Team> getCurrentTeams() {
@@ -55,22 +53,6 @@ public class Teamlog implements Serializable, Loadable, Saveable {
 
     public Team getTeam(int choice) {
         return currentTeams.get(choice);
-    }
-
-    public void updateFromWeb() {
-        ArrayList<Player> temp = fantasyWebData.getWebpool();
-        for (Team team: currentTeams) {
-            for (Player player: team.getTeamplayers()) {
-                for (int i = 0; i < temp.size(); i++) {
-
-                    Player next = temp.get(i);
-                    if (player.getName().equals(next.getName())) {
-                        player.setOverall(next.getOverall());
-                        System.out.println(player);
-                    }
-                }
-            }
-        }
     }
 
 }

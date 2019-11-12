@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import model.Player;
+import model.Team;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -39,23 +40,23 @@ public class FantasyWebData {
         }
     }
 
-    public void printallplayers() {
-
-        for (int i = 0; i < nodelist.getLength(); i++) {
-            Node node = nodelist.item(i);
-
-
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element) node;
-
-                System.out.println("ID : " + element.getElementsByTagName("playerId").item(0).getTextContent());
-                System.out.println("Name : " + element.getElementsByTagName("name").item(0).getTextContent());
-                System.out.println("PTS : " + element.getElementsByTagName("PTS").item(0).getTextContent());
-                System.out.println("Minutes : " + element.getElementsByTagName("Minutes").item(0).getTextContent());
-            }
-
-        }
-    }
+//    public void printallplayers() {
+//
+//        for (int i = 0; i < nodelist.getLength(); i++) {
+//            Node node = nodelist.item(i);
+//
+//
+//            if (node.getNodeType() == Node.ELEMENT_NODE) {
+//                Element element = (Element) node;
+//
+//                System.out.println("ID : " + element.getElementsByTagName("playerId").item(0).getTextContent());
+//                System.out.println("Name : " + element.getElementsByTagName("name").item(0).getTextContent());
+//                System.out.println("PTS : " + element.getElementsByTagName("PTS").item(0).getTextContent());
+//                System.out.println("Minutes : " + element.getElementsByTagName("Minutes").item(0).getTextContent());
+//            }
+//
+//        }
+//    }
 
     private void calOverall() {
         for (int i = 0; i < nodelist.getLength(); i++) {
@@ -75,6 +76,23 @@ public class FantasyWebData {
 
     public ArrayList<Player> getWebpool() {
         return webpool;
+    }
+
+
+    public void updateFromWeb(ArrayList<Team> teams) {
+        ArrayList<Player> temp = getWebpool();
+        for (Team team: teams) {
+            for (Player player: team.getTeamplayers()) {
+                for (int i = 0; i < temp.size(); i++) {
+
+                    Player next = temp.get(i);
+                    if (player.getName().equals(next.getName())) {
+                        player.setOverall(next.getOverall());
+                        System.out.println(player);
+                    }
+                }
+            }
+        }
     }
 
 

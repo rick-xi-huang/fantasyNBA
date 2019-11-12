@@ -21,6 +21,7 @@ public class World implements Serializable {
     private Playerpool playerpool;
     private Teamlog teamlog;
     private Eventlog eventlog;
+    private FantasyWebData fantasyWebData;
 
     public World() throws IOException {
 
@@ -28,6 +29,7 @@ public class World implements Serializable {
         playerpool = new Playerpool();
         teamlog = new Teamlog();
         eventlog = new Eventlog();
+        fantasyWebData = new FantasyWebData();
 
     }
 
@@ -113,7 +115,7 @@ public class World implements Serializable {
                 save();
             }
             if (selection == 3) {
-                teamlog.updateFromWeb();
+                fantasyWebData.updateFromWeb(teamlog.getCurrentTeams());
             }
             if (selection == 4) {
                 break;
