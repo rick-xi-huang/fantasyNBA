@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public abstract class Event {
+public abstract class Event extends Subject {
 
     protected ArrayList<Team> currentTeams;
     protected int teamNum;
@@ -21,6 +21,7 @@ public abstract class Event {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
         date = simpleDateFormat.format(new Date());
         event = date + "\n";
+        observerList.add(new BroadCast());
 
     }
 

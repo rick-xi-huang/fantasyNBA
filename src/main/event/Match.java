@@ -18,10 +18,7 @@ public class Match extends Event {
             allTeamsMatch();
         } catch (InvalidMatch e) {
             System.out.println("Not enough teams");
-        } finally {
-            eventMessage();
         }
-
     }
 
 
@@ -44,11 +41,15 @@ public class Match extends Event {
 
     public void twoTeamsMatch(Team team1, Team team2) {
 
-        if ((team1.teamPower() * Math.random()) > (team2.teamPower() * Math.random())) {
+        int teamscore1 = (int) (team1.teamPower() * Math.random());
+        int teamscore2 = (int) (team2.teamPower() * Math.random());
+
+        if (teamscore1 > teamscore2) {
             event = event + team1.getTeamname() + " won the match against " + team2.getTeamname() + "\n";
         } else {
             event = event + team2.getTeamname() + " won the match against " + team1.getTeamname() + "\n";
         }
+        notifyObservers(team1,teamscore1,team2,teamscore2);
 
     }
 
