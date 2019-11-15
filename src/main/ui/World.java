@@ -7,6 +7,9 @@ import event.Match;
 import exception.InvalidInput;
 import exception.InvalidMenuSelection;
 import exception.InvalidPlayerSelection;
+import javafx.application.Application;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import model.Player;
 import model.Team;
 import network.FantasyWebData;
@@ -15,7 +18,16 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class World implements Serializable {
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+
+
+public class World extends Application {
 
     private Scanner scanner;
     private Playerpool playerpool;
@@ -132,7 +144,6 @@ public class World implements Serializable {
 
         Team team = new Team();
         System.out.println("Please enter your team name:");
-        scanner.nextLine();
         String input = scanner.nextLine();
         team.setTeamname(input);
 
@@ -179,23 +190,16 @@ public class World implements Serializable {
         teamlog.removeTeam(teamlog.getTeam(choice));
     }
 
-    public void load() throws IOException {
+    private void load() throws IOException {
         teamlog.load();
         eventlog.load();
     }
 
 
-    public void save() throws IOException {
+    private void save() throws IOException {
         teamlog.save();
         eventlog.save();
     }
-
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-
-        World world = new World();
-        world.mainMenu();
-    }
-
 
     private int selectionFour() {
 
@@ -230,6 +234,110 @@ public class World implements Serializable {
         }
 
         return selection;
+    }
+
+
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage stage) throws IOException {
+        stage.setTitle("Fantasy NBA");
+        Scene scene = new Scene(new VBox(), 400, 350);
+        scene.setFill(Color.OLDLACE);
+        MenuBar menuBar = new MenuBar();
+
+        final VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setSpacing(10);
+        vbox.setPadding(new Insets(0, 10, 0, 10));
+        vbox.setVisible(true);
+
+        Menu teamMenu = new Menu("Team");
+        MenuItem add = new MenuItem("Add a New Team");
+        add.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                newTeam();
+            }
+        });
+
+        MenuItem delete = new MenuItem("Delete a Team");
+        delete.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                deleteTeam();
+            }
+        });
+
+        MenuItem review = new MenuItem("Review all teams");
+        review.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                System.out.println("All teams:" + teamlog.getCurrentTeams());
+            }
+        });
+
+        teamMenu.getItems().addAll(add, delete, review);
+
+        Menu eventmenu = new Menu("Event");
+
+        MenuItem match = new MenuItem("New Match Day");
+        match.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                Match match = new Match(teamlog.getCurrentTeams());
+                match.newMatch();
+                eventlog.addEvent(match.getEvent());
+            }
+        });
+
+        MenuItem view = new MenuItem("View History");
+        view.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                eventlog.printAll();
+            }
+        });
+
+        eventmenu.getItems().addAll(match, view);
+
+        Menu datamenu = new Menu("Data");
+
+        MenuItem load = new MenuItem("Load");
+        load.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                try {
+                    load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        MenuItem save = new MenuItem("Save");
+        save.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                try {
+                    save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        MenuItem web = new MenuItem("Web");
+        web.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                fantasyWebData.updateFromWeb(teamlog.getCurrentTeams());
+            }
+        });
+
+        datamenu.getItems().addAll(load,save,web);
+
+        menuBar.getMenus().addAll(teamMenu,eventmenu,datamenu);
+
+        ((VBox) scene.getRoot()).getChildren().addAll(menuBar, vbox);
+
+        stage.setScene(scene);
+        stage.show();
+
     }
 
 
