@@ -8,6 +8,8 @@ import exception.InvalidInput;
 import exception.InvalidMenuSelection;
 import exception.InvalidPlayerSelection;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import model.Player;
@@ -34,6 +36,7 @@ public class World extends Application {
     private Teamlog teamlog;
     private Eventlog eventlog;
     private FantasyWebData fantasyWebData;
+    private Stage stage;
 
     public World() throws IOException {
 
@@ -141,7 +144,6 @@ public class World extends Application {
     //MODIFIES: this team player
     //EFFECTS: create a new team object
     private void newTeam() {
-
         Team team = new Team();
         System.out.println("Please enter your team name:");
         String input = scanner.nextLine();
@@ -247,6 +249,8 @@ public class World extends Application {
         Scene scene = new Scene(new VBox(), 400, 350);
         scene.setFill(Color.OLDLACE);
         MenuBar menuBar = new MenuBar();
+        TextArea ta = new TextArea();
+
 
         final VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
@@ -258,7 +262,7 @@ public class World extends Application {
         MenuItem add = new MenuItem("Add a New Team");
         add.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                newTeam();
+                addTeam(stage,scene);
             }
         });
 
@@ -273,6 +277,7 @@ public class World extends Application {
         review.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 System.out.println("All teams:" + teamlog.getCurrentTeams());
+                //ta.setText("All teams:" + teamlog.getCurrentTeams());
             }
         });
 
@@ -333,10 +338,67 @@ public class World extends Application {
 
         menuBar.getMenus().addAll(teamMenu,eventmenu,datamenu);
 
-        ((VBox) scene.getRoot()).getChildren().addAll(menuBar, vbox);
+        Console console = new Console(ta);
+        PrintStream ps = new PrintStream(console, true);
+        System.setOut(ps);
+        System.setErr(ps);
+
+        ((VBox) scene.getRoot()).getChildren().addAll(menuBar,vbox,ta);
 
         stage.setScene(scene);
         stage.show();
+
+    }
+
+    public void addTeam(Stage stage, Scene scene) {
+
+        ArrayList<Player> assembleTeam = new ArrayList<>();
+        Button button1 = new Button("Go to Home");
+        button1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                stage.setScene(scene);
+            }
+        });
+
+        TextArea teamname = new TextArea("Team Name");
+
+        Button button2 = new Button("Confirm");
+        button2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Team newTeam = new Team();
+                newTeam.setTeamplayers(assembleTeam);
+                newTeam.setTeamname(teamname.getText());
+                teamlog.addTeam(newTeam);
+            }
+        });
+
+        VBox layout2 = new VBox();
+        layout2.getChildren().addAll(button1,button2,teamname);
+
+        final CheckBox[] cbs = new CheckBox[50];
+
+        for (int i = 0; i < 50; i++) {
+            final CheckBox cb = cbs[i] = new CheckBox(playerpool.getPlayer(i).getName());
+            int finalI = i;
+            cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                public void changed(ObservableValue<? extends Boolean> ov,
+                                    Boolean old_val, Boolean new_val) {
+//                  assembleTeam.add(new_val ? playerpool.getPlayer(finalI) : null);
+                    if (new_val) {
+                        assembleTeam.add(playerpool.getPlayer(finalI));
+                    }
+                }
+            });
+        }
+
+        layout2.getChildren().addAll(cbs);
+
+        Scene scene2 = new Scene(layout2,300,250);
+        stage.setScene(scene2);
+
+
 
     }
 
