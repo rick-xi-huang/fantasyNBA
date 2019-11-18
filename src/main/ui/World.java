@@ -11,6 +11,8 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import model.Player;
 import model.Team;
@@ -334,7 +336,15 @@ public class World extends Application {
             }
         });
 
-        datamenu.getItems().addAll(load,save,web);
+        MenuItem pool = new MenuItem("Pool");
+        pool.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                viewPlayerPool(stage,scene);
+            }
+        });
+
+
+        datamenu.getItems().addAll(load,save,web,pool);
 
         menuBar.getMenus().addAll(teamMenu,eventmenu,datamenu);
 
@@ -353,15 +363,10 @@ public class World extends Application {
     public void addTeam(Stage stage, Scene scene) {
 
         ArrayList<Player> assembleTeam = new ArrayList<>();
-        Button button1 = new Button("Go to Home");
-        button1.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stage.setScene(scene);
-            }
-        });
+        Button button1 = getHomeButton(stage, scene);
 
-        TextArea teamname = new TextArea("Team Name");
+        TextField teamname = new TextField();
+        teamname.setPromptText("Please enter your team name");
 
         Button button2 = new Button("Confirm");
         button2.setOnAction(new EventHandler<ActionEvent>() {
@@ -374,8 +379,8 @@ public class World extends Application {
             }
         });
 
-        VBox layout2 = new VBox();
-        layout2.getChildren().addAll(button1,button2,teamname);
+        VBox layout1 = new VBox();
+        layout1.getChildren().addAll(button1,button2,teamname);
 
         final CheckBox[] cbs = new CheckBox[50];
 
@@ -384,22 +389,66 @@ public class World extends Application {
             int finalI = i;
             cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
                 public void changed(ObservableValue<? extends Boolean> ov,
-                                    Boolean old_val, Boolean new_val) {
+                                    Boolean oldval, Boolean newval) {
 //                  assembleTeam.add(new_val ? playerpool.getPlayer(finalI) : null);
-                    if (new_val) {
+                    if (newval) {
                         assembleTeam.add(playerpool.getPlayer(finalI));
                     }
+                    if (!newval) {
+                        assembleTeam.remove(playerpool.getPlayer(finalI));
+                    }
+
                 }
             });
         }
 
+        VBox layout2 = new VBox();
         layout2.getChildren().addAll(cbs);
 
-        Scene scene2 = new Scene(layout2,300,250);
+        ScrollPane sp = new ScrollPane();
+        sp.setContent(layout2);
+
+        layout1.getChildren().add(sp);;
+
+        Scene scene2 = new Scene(layout1,300,450);
         stage.setScene(scene2);
 
+    }
+
+    public void viewPlayerPool(Stage stage, Scene scene) {
+        VBox layout = new VBox();
+        layout.getChildren().addAll(getHomeButton(stage,scene),getPlayerTableView());
+        stage.setScene(new Scene(layout,300,450));
+    }
+
+    private Button getHomeButton(Stage stage, Scene scene) {
+        Button button1 = new Button("Go to Home");
+        button1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                stage.setScene(scene);
+            }
+        });
+        return button1;
+    }
 
 
+    private TableView<Player> getPlayerTableView() {
+        TableView<Player> table = new TableView<>();
+
+        TableColumn idCol = new TableColumn("id");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        TableColumn nameCol = new TableColumn("name");
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn overallCol = new TableColumn("overall");
+        overallCol.setCellValueFactory(new PropertyValueFactory<>("overall"));
+
+        table.setItems(playerpool.getData());
+
+        table.getColumns().addAll(idCol,nameCol,overallCol);
+        return table;
     }
 
 

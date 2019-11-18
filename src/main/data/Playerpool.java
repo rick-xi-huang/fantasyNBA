@@ -1,5 +1,7 @@
 package data;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.Player;
 
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.util.List;
 public class Playerpool {
 
     private HashMap<Integer,Player> allplayers;
+    final ObservableList<Player> data = FXCollections.observableArrayList();
 
     //load player information from the player pool
     //REQUIRES: NBApool.csv in correct format in the data folder
@@ -33,6 +36,7 @@ public class Playerpool {
             Player player = new Player(Integer.parseInt(partsOfLine.get(0)),
                     partsOfLine.get(1), Double.parseDouble(partsOfLine.get(15)));
             allplayers.put(i,player);
+            data.add(player);
             i++;
         }
     }
@@ -51,6 +55,10 @@ public class Playerpool {
 
     public Player getPlayer(int key) {
         return allplayers.get(key);
+    }
+
+    public ObservableList<Player> getData() {
+        return data;
     }
 
 }

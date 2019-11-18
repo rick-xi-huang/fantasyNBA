@@ -1,12 +1,14 @@
 package model;
 
+import javafx.beans.property.*;
+
 import java.io.Serializable;
 import java.util.Objects;
 
 public class Player implements Serializable {
-    private int id;
-    private String name;
-    private double overall;
+    private final SimpleIntegerProperty id;
+    private final SimpleStringProperty name;
+    private final SimpleDoubleProperty overall;
     private Team team;
 
     //construct a player
@@ -14,23 +16,23 @@ public class Player implements Serializable {
     //EFFECTS: generate a player object with ID name and overall
 
     public Player(int id, String name, double overall) {
-        this.id = id;
-        this.name = name;
-        this.overall = overall;
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.overall = new SimpleDoubleProperty(overall);
     }
 
 
     //get the name of the player
     //EFFECTS: return the name of the player
     public String getName() {
-        return name;
+        return name.get();
     }
 
     //change the name of the player
     //MODIFIES: this
     //EFFECTS: change the name of the player
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
     }
 
     public void setTeam(Team team) {
@@ -54,20 +56,28 @@ public class Player implements Serializable {
     //get the overall of the player
     //EFFECTS: return the name of the player
     public double getOverall() {
-        return overall;
+        return overall.get();
     }
 
     //change the overall of the player
     //MODIFIES: this
     //EFFECTS: change the overall of the player
     public void setOverall(double overall) {
-        this.overall = overall;
+        this.overall.set(overall);
+    }
+
+    public int getId() {
+        return id.get();
+    }
+
+    public void setId(int id) {
+        this.id.set(id);
     }
 
     //covert to String output
     //EFFECTS: return String for printing statement
     public String toString() {
-        return "(" + id + ")" + " " + name + " " + overall;
+        return "(" + id.get() + ")" + " " + name.get() + " " + overall.get();
     }
 
     @Override
@@ -79,14 +89,13 @@ public class Player implements Serializable {
             return false;
         }
         Player player = (Player) o;
-        return id == player.id
-                && Double.compare(player.overall, overall) == 0
-                && Objects.equals(name, player.name)
-                && Objects.equals(team, player.team);
+        return Objects.equals(id, player.id)
+                && Objects.equals(name, player.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, overall, team);
+        return Objects.hash(id, name);
     }
+
 }
