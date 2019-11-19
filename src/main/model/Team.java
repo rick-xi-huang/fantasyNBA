@@ -10,12 +10,32 @@ public class Team implements Serializable {
     private ArrayList<Player> teamplayers;
     private String teamname;
     private int teamPower;
+    private int win;
+    private int loss;
 
     //construct a new team
     //MODIFIES: this
     //instantiate a team object
     public Team() {
         teamplayers = new ArrayList<>();
+        win = 0;
+        loss = 0;
+    }
+
+    public void addwin() {
+        win++;
+    }
+
+    public void addloss() {
+        loss++;
+    }
+
+    public int getWin() {
+        return win;
+    }
+
+    public int getLoss() {
+        return loss;
     }
 
     //get teamplayers from the team

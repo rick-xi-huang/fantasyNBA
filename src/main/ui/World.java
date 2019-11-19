@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 import model.Player;
 import model.PlayerDisplay;
 import model.Team;
+import model.TeamDisplay;
 import network.FantasyWebData;
 
 import java.io.*;
@@ -306,6 +307,13 @@ public class World extends Application {
             }
         });
 
+        MenuItem teamboard = new MenuItem("View Leaderboard");
+        teamboard.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                viewTeamBoard(stage,scene);
+            }
+        });
+
         MenuItem view = new MenuItem("View History");
         view.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
@@ -313,7 +321,7 @@ public class World extends Application {
             }
         });
 
-        eventmenu.getItems().addAll(newseason, match, view);
+        eventmenu.getItems().addAll(newseason, match, teamboard,view);
 
         Menu datamenu = new Menu("Data");
 
@@ -431,6 +439,13 @@ public class World extends Application {
         stage.setScene(new Scene(layout,300,450));
     }
 
+    public void viewTeamBoard(Stage stage, Scene scene) {
+        VBox layout = new VBox();
+        layout.getChildren().addAll(getHomeButton(stage,scene),getTeamTableView());
+        stage.setScene(new Scene(layout,300,450));
+    }
+
+
     private Button getHomeButton(Stage stage, Scene scene) {
         Button button1 = new Button("Go to Home");
         button1.setOnAction(new EventHandler<ActionEvent>() {
@@ -458,6 +473,24 @@ public class World extends Application {
         table.setItems(playerpool.getData());
 
         table.getColumns().addAll(idCol,nameCol,overallCol);
+        return table;
+    }
+
+    private TableView<TeamDisplay> getTeamTableView() {
+        TableView<TeamDisplay> table = new TableView<>();
+
+        TableColumn nameCol = new TableColumn("teamname");
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("teamname"));
+
+        TableColumn winCol = new TableColumn("win");
+        winCol.setCellValueFactory(new PropertyValueFactory<>("win"));
+
+        TableColumn lossCol = new TableColumn("loss");
+        lossCol.setCellValueFactory(new PropertyValueFactory<>("loss"));
+
+        table.setItems(season.getData());
+
+        table.getColumns().addAll(nameCol,winCol,lossCol);
         return table;
     }
 

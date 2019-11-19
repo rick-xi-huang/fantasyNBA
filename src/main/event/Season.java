@@ -1,12 +1,15 @@
 package event;
 
 import exception.InvalidMatch;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import model.TeamDisplay;
 import model.Team;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
 
 public class Season extends Subject {
 
@@ -16,6 +19,7 @@ public class Season extends Subject {
     private ArrayList<String> history;
     private ArrayList<Match> matches;
     private ArrayList<Trade> trades;
+    final ObservableList<TeamDisplay> data = FXCollections.observableArrayList();
 
 
 
@@ -66,6 +70,16 @@ public class Season extends Subject {
 
     public ArrayList<String> getHistory() {
         return history;
+    }
+
+    public ObservableList<TeamDisplay> getData() {
+        for (Team team: currentTeams) {
+            TeamDisplay teamDisplay = new TeamDisplay(team);
+            if (!data.contains(teamDisplay)) {
+                data.add(teamDisplay);
+            }
+        }
+        return data;
     }
 
 }
