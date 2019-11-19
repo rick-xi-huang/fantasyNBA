@@ -15,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import model.Player;
+import model.PlayerDisplay;
 import model.Team;
 import network.FantasyWebData;
 
@@ -433,8 +434,8 @@ public class World extends Application {
     }
 
 
-    private TableView<Player> getPlayerTableView() {
-        TableView<Player> table = new TableView<>();
+    private TableView<PlayerDisplay> getPlayerTableView() {
+        TableView<PlayerDisplay> table = new TableView<>();
 
         TableColumn idCol = new TableColumn("id");
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));

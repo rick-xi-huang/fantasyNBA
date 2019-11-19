@@ -1,14 +1,12 @@
 package model;
 
-import javafx.beans.property.*;
-
 import java.io.Serializable;
 import java.util.Objects;
 
 public class Player implements Serializable {
-    private final SimpleIntegerProperty id;
-    private final SimpleStringProperty name;
-    private final SimpleDoubleProperty overall;
+    private int id;
+    private String name;
+    private double overall;
     private Team team;
 
     //construct a player
@@ -16,23 +14,23 @@ public class Player implements Serializable {
     //EFFECTS: generate a player object with ID name and overall
 
     public Player(int id, String name, double overall) {
-        this.id = new SimpleIntegerProperty(id);
-        this.name = new SimpleStringProperty(name);
-        this.overall = new SimpleDoubleProperty(overall);
+        this.id = id;
+        this.name = name;
+        this.overall = overall;
     }
 
 
     //get the name of the player
     //EFFECTS: return the name of the player
     public String getName() {
-        return name.get();
+        return name;
     }
 
     //change the name of the player
     //MODIFIES: this
     //EFFECTS: change the name of the player
     public void setName(String name) {
-        this.name.set(name);
+        this.name = name;
     }
 
     public void setTeam(Team team) {
@@ -56,28 +54,28 @@ public class Player implements Serializable {
     //get the overall of the player
     //EFFECTS: return the name of the player
     public double getOverall() {
-        return overall.get();
+        return overall;
     }
 
     //change the overall of the player
     //MODIFIES: this
     //EFFECTS: change the overall of the player
     public void setOverall(double overall) {
-        this.overall.set(overall);
+        this.overall = overall;
     }
 
     public int getId() {
-        return id.get();
+        return id;
     }
 
     public void setId(int id) {
-        this.id.set(id);
+        this.id = id;
     }
 
     //covert to String output
     //EFFECTS: return String for printing statement
     public String toString() {
-        return "(" + id.get() + ")" + " " + name.get() + " " + overall.get();
+        return "(" + id + ")" + " " + name + " " + overall;
     }
 
     @Override

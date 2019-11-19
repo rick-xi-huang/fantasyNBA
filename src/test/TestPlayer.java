@@ -58,6 +58,18 @@ class TestPlayer {
     }
 
     @Test
+    void testGetId() {
+        assertEquals(player.getId(), 1);
+    }
+
+    @Test
+    void testSetId() {
+        player.setId(2);
+        assertEquals(player.getId(), 2);
+    }
+
+
+    @Test
     void testToString() {
         assertEquals(player.toString(), "(1) James 88.0");
     }
@@ -68,11 +80,11 @@ class TestPlayer {
         Player player2 = new Player(1, "James", 88);
         Player player3 = new Player(1, "James", 90);
         assertTrue(player1.equals(player1));
-        //assertTrue(player1.equals(player2));
-        assertFalse(player1.equals(player3));
+        assertTrue(player1.equals(player2));
+        assertTrue(player1.equals(player3));
         assertFalse(player1.equals(null));
         assertFalse(player1.equals(team));
-        assertEquals(player1.hashCode(), 1969767662);
+        assertEquals(player1.hashCode(), 71339268);
     }
 
 }
