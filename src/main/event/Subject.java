@@ -17,9 +17,9 @@ public abstract class Subject {
         observerList.add(observer);
     }
 
-    public void notifyObservers(Team team1, int teamscore1, Team team2, int teamscore2) {
+    public void notifyObservers(Match match) {
         for (Observer observer: observerList) {
-            observer.update(team1,teamscore1,team2,teamscore2);
+            observer.update(match);
         }
     }
 

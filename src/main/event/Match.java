@@ -1,56 +1,51 @@
 package event;
 
-import exception.InvalidMatch;
 import model.Team;
 
-import java.util.ArrayList;
+public class Match extends Subject {
 
-public class Match extends Event {
+    private Team team1;
+    private Team team2;
+    private int team1Score;
+    private int team2Score;
+    private String message;
+    private Team winner;
+    private Team loser;
 
-    public Match(ArrayList<Team> currentTeams) {
-        super(currentTeams);
+    public Match(Team team1, Team team2) {
+        this.team1 = team1;
+        this.team2 = team2;
+        observerList.add(new BroadCast());
     }
 
 
-    public void newMatch() {
+    public void twoTeamsMatch() {
 
-        try {
-            allTeamsMatch();
-        } catch (InvalidMatch e) {
-            System.out.println("Not enough teams");
-        }
-    }
+        team1Score = (int) (team1.teamPower() * Math.random());
+        team2Score = (int) (team2.teamPower() * Math.random());
 
-
-    public void allTeamsMatch() throws InvalidMatch {
-
-        if (currentTeams.size() < 2) {
-            throw new InvalidMatch();
-        }
-
-        for (int i = 0; i < teamNum; i++) {
-
-            for (int j = i + 1; j < teamNum; j++) {
-
-                twoTeamsMatch(currentTeams.get(i), currentTeams.get(j));
-
-            }
-        }
-
-    }
-
-    public void twoTeamsMatch(Team team1, Team team2) {
-
-        int teamscore1 = (int) (team1.teamPower() * Math.random());
-        int teamscore2 = (int) (team2.teamPower() * Math.random());
-
-        if (teamscore1 > teamscore2) {
-            event = event + team1.getTeamname() + " won the match against " + team2.getTeamname() + "\n";
+        if (team1Score > team2Score) {
+            winner = team1;
+            loser = team2;
+            message = team1.getTeamname() + " won the match against " + team2.getTeamname() + "\n";
         } else {
-            event = event + team2.getTeamname() + " won the match against " + team1.getTeamname() + "\n";
+            message = team2.getTeamname() + " won the match against " + team1.getTeamname() + "\n";
+            winner = team2;
+            loser = team1;
         }
-        notifyObservers(team1,teamscore1,team2,teamscore2);
+        notifyObservers(this);
 
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public Team getWinner() {
+        return winner;
+    }
+
+    public Team getLoser() {
+        return loser;
+    }
 }

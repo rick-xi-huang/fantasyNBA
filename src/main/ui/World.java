@@ -4,6 +4,7 @@ import data.Eventlog;
 import data.Playerpool;
 import data.Teamlog;
 import event.Match;
+import event.Season;
 import exception.InvalidInput;
 import exception.InvalidMenuSelection;
 import exception.InvalidPlayerSelection;
@@ -39,6 +40,7 @@ public class World extends Application {
     private Teamlog teamlog;
     private Eventlog eventlog;
     private FantasyWebData fantasyWebData;
+    private Season season;
     private Stage stage;
 
     public World() throws IOException {
@@ -48,6 +50,7 @@ public class World extends Application {
         teamlog = new Teamlog();
         eventlog = new Eventlog();
         fantasyWebData = new FantasyWebData();
+        season = new Season(teamlog.getCurrentTeams());
 
     }
 
@@ -104,9 +107,9 @@ public class World extends Application {
             System.out.println(" 1 New Match Day\n 2 View History \n 3  \n 4 Back");
             int selection = selectionFour();
             if (selection == 1) {
-                Match match = new Match(teamlog.getCurrentTeams());
-                match.newMatch();
-                eventlog.addEvent(match.getEvent());
+                Season season = new Season(teamlog.getCurrentTeams());
+                season.newMatchDay();
+                eventlog.update(season.getHistory());
             }
             if (selection == 2) {
                 eventlog.printAll();
@@ -288,12 +291,18 @@ public class World extends Application {
 
         Menu eventmenu = new Menu("Event");
 
+        MenuItem newseason = new MenuItem("New Season");
+        newseason.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                season = new Season(teamlog.getCurrentTeams());
+            }
+        });
+
         MenuItem match = new MenuItem("New Match Day");
         match.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                Match match = new Match(teamlog.getCurrentTeams());
-                match.newMatch();
-                eventlog.addEvent(match.getEvent());
+                season.newMatchDay();
+                eventlog.update(season.getHistory());
             }
         });
 
@@ -304,7 +313,7 @@ public class World extends Application {
             }
         });
 
-        eventmenu.getItems().addAll(match, view);
+        eventmenu.getItems().addAll(newseason, match, view);
 
         Menu datamenu = new Menu("Data");
 

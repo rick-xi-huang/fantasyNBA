@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestTrade {
     Team team1;
     Team team2;
-    ArrayList<Team> allteams;
     Trade trade;
 
     @BeforeEach
@@ -24,23 +23,19 @@ public class TestTrade {
         team1.addplayer(new Player(2, "Player2", 90));
         team2.addplayer(new Player(3, "Player3", 90));
         team2.addplayer(new Player(4, "Player3", 90));
-        allteams = new ArrayList<>();
-        allteams.add(team1);
-        allteams.add(team2);
-        trade = new Trade(allteams);
+        trade = new Trade(team1,team2);
     }
 
     @Test
     void testTrade() {
-        trade = new Trade(allteams);
-        assertEquals(trade.event, "\n");
+        trade = new Trade(team1,team2);
     }
 
     @Test
     void testPlayerExchange() {
-        trade.playerExchange(team1, 1, team2, 1);
-        assertTrue(trade.event.contains(team1.getTeamname()));
-        assertTrue(trade.event.contains(team2.getTeamname()));
+        trade.playerExchange(1, 1);
+        assertTrue(trade.getMessage().contains(team1.getTeamname()));
+        assertTrue(trade.getMessage().contains(team2.getTeamname()));
     }
 
 }

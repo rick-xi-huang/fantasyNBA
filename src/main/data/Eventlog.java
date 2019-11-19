@@ -43,6 +43,9 @@ public class Eventlog implements Serializable, Loadable, Saveable {
 //        allEvents.remove(event);
 //    }
 
+    public void update(ArrayList<String> allEvents) {
+        this.allEvents = allEvents;
+    }
 
     public ArrayList<String> getAllEvents() {
         return allEvents;
