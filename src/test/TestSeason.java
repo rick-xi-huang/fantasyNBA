@@ -61,5 +61,10 @@ public class TestSeason {
         }
     }
 
+    @Test
+    void testGetData() {
+        assertEquals(season2.getData().size(),2);
+    }
+
 
 }

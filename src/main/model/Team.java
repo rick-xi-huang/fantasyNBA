@@ -109,4 +109,9 @@ public class Team implements Serializable {
     public int hashCode() {
         return Objects.hash(teamplayers, teamname, teamPower);
     }
+
+    public void resetRecord() {
+        win = 0;
+        loss = 0;
+    }
 }

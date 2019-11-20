@@ -19,7 +19,6 @@ public class Season extends Subject {
     private ArrayList<String> history;
     private ArrayList<Match> matches;
     private ArrayList<Trade> trades;
-    final ObservableList<TeamDisplay> data = FXCollections.observableArrayList();
 
 
 
@@ -31,8 +30,15 @@ public class Season extends Subject {
         date = simpleDateFormat.format(new Date());
         history = new ArrayList<>();
         history.add(date + "\n New Season Start!\n");
+        clearRecord();
         matches = new ArrayList<>();
         trades = new ArrayList<>();
+    }
+
+    private void clearRecord() {
+        for (Team team: currentTeams) {
+            team.resetRecord();
+        }
     }
 
     public void newMatchDay() {
@@ -73,11 +79,10 @@ public class Season extends Subject {
     }
 
     public ObservableList<TeamDisplay> getData() {
+        final ObservableList<TeamDisplay> data = FXCollections.observableArrayList();
         for (Team team: currentTeams) {
             TeamDisplay teamDisplay = new TeamDisplay(team);
-            if (!data.contains(teamDisplay)) {
-                data.add(teamDisplay);
-            }
+            data.add(teamDisplay);
         }
         return data;
     }

@@ -47,3 +47,4 @@ public class TeamDisplay {
         this.loss.set(loss);
     }
 }
+

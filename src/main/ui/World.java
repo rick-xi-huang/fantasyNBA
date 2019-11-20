@@ -3,11 +3,7 @@ package ui;
 import data.Eventlog;
 import data.Playerpool;
 import data.Teamlog;
-import event.Match;
 import event.Season;
-import exception.InvalidInput;
-import exception.InvalidMenuSelection;
-import exception.InvalidPlayerSelection;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,7 +19,6 @@ import network.FantasyWebData;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -36,7 +31,6 @@ import javafx.stage.Stage;
 
 public class World extends Application {
 
-    private Scanner scanner;
     private Playerpool playerpool;
     private Teamlog teamlog;
     private Eventlog eventlog;
@@ -46,157 +40,12 @@ public class World extends Application {
 
     public World() throws IOException {
 
-        scanner = new Scanner(System.in);
         playerpool = new Playerpool();
         teamlog = new Teamlog();
         eventlog = new Eventlog();
         fantasyWebData = new FantasyWebData();
         season = new Season(teamlog.getCurrentTeams());
 
-    }
-
-
-    private void mainMenu() throws IOException, ClassNotFoundException {
-
-
-        while (true) {
-
-            System.out.println("Please select: \n 1 Team Management \n 2 Event\n 3 Data \n 4 Quit");
-            int selection = selectionFour();
-
-            if (selection == 1) {
-                teamMenu();
-            }
-            if (selection == 2) {
-                eventMenu();
-            }
-            if (selection == 3) {
-                dataMenu();
-            }
-            if (selection == 4) {
-                break;
-            }
-        }
-
-
-    }
-
-    private void teamMenu() {
-
-        while (true) {
-            System.out.println(" 1 Add a new team \n 2 Delete a team \n 3 Review all teams \n 4 Back");
-            int selection = selectionFour();
-            if (selection == 1) {
-                newTeam();
-            }
-            if (selection == 2) {
-                deleteTeam();
-            }
-            if (selection == 3) {
-                System.out.println("All teams:" + teamlog.getCurrentTeams());
-            }
-            if (selection == 4) {
-                break;
-            }
-
-        }
-    }
-
-    private void eventMenu() {
-
-        while (true) {
-            System.out.println(" 1 New Match Day\n 2 View History \n 3  \n 4 Back");
-            int selection = selectionFour();
-            if (selection == 1) {
-                Season season = new Season(teamlog.getCurrentTeams());
-                season.newMatchDay();
-                eventlog.update(season.getHistory());
-            }
-            if (selection == 2) {
-                eventlog.printAll();
-            }
-            if (selection == 3) {
-                break;
-            }
-            if (selection == 4) {
-                break;
-            }
-
-        }
-    }
-
-    private void dataMenu() throws IOException, ClassNotFoundException {
-
-        while (true) {
-            System.out.println(" 1 Load \n 2 Save \n 3 Web Data \n 4 Back");
-            int selection = selectionFour();
-            if (selection == 1) {
-                load();
-            }
-            if (selection == 2) {
-                save();
-            }
-            if (selection == 3) {
-                fantasyWebData.updateFromWeb(teamlog.getCurrentTeams());
-            }
-            if (selection == 4) {
-                break;
-            }
-        }
-
-    }
-
-    //generate a new team based on user input
-    //REQUIRES: correct user input
-    //MODIFIES: this team player
-    //EFFECTS: create a new team object
-    private void newTeam() {
-        Team team = new Team();
-        System.out.println("Please enter your team name:");
-        String input = scanner.nextLine();
-        team.setTeamname(input);
-
-        for (int i = 0; i < 50; i = i + 10) {
-
-            int selection = selectionplayer(randomDraft(i));
-            scanner.nextLine();
-            team.addplayer(playerpool.getPlayer(selection - 1));
-
-        }
-
-        System.out.println("The team you have assembled:" + team.getTeamname() + "" + team.getTeamplayers());
-        teamlog.addTeam(team);
-    }
-
-    private ArrayList<Integer> randomDraft(int i) {
-
-        ArrayList<Integer> smallpool = new ArrayList<>();
-
-        int x = i + (int) (Math.random() * ((10 - 1) + 1)) + 1;
-        smallpool.add(x);
-        int y = i + (int) (Math.random() * ((10 - 1) + 1)) + 1;
-        smallpool.add(y);
-        int z = i + (int) (Math.random() * ((10 - 1) + 1)) + 1;
-        smallpool.add(z);
-
-        Player candidate1 = playerpool.getPlayer(x - 1);
-        Player candidate2 = playerpool.getPlayer(y - 1);
-        Player candidate3 = playerpool.getPlayer(z - 1);
-
-        System.out.println("Please enter the player ID");
-        System.out.println(candidate1 + "" + candidate2 + "" + candidate3);
-
-        return smallpool;
-    }
-
-    //delete a team based on user input
-    //REQUIRES: correct user input
-    //MODIFIES: this
-    //EFFECTS: remove a team object from currentTeams
-    private void deleteTeam() {
-        System.out.println("All teams:" + teamlog.getCurrentTeams() + "\n Please select the team to delete");
-        int choice = scanner.nextInt();
-        teamlog.removeTeam(teamlog.getTeam(choice));
     }
 
     private void load() throws IOException {
@@ -210,54 +59,17 @@ public class World extends Application {
         eventlog.save();
     }
 
-    private int selectionFour() {
-
-        int selection = 0;
-
-        try {
-            selection = scanner.nextInt();
-            if (!(selection == 1 || selection == 2 || selection == 3 || selection == 4)) {
-                throw new InvalidMenuSelection();
-            }
-        } catch (InvalidInput e) {
-            System.out.println("Invalid Input");
-        }
-
-        return selection;
-
-    }
-
-    private int selectionplayer(ArrayList<Integer> list) {
-
-        int selection = 0;
-
-        try {
-            selection = scanner.nextInt();
-
-            if (!list.contains(selection)) {
-                throw new InvalidPlayerSelection();
-            }
-
-        } catch (InvalidInput e) {
-            System.out.println("Invalid Input");
-        }
-
-        return selection;
-    }
-
-
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
         stage.setTitle("Fantasy NBA");
         Scene scene = new Scene(new VBox(), 400, 350);
         scene.setFill(Color.OLDLACE);
         MenuBar menuBar = new MenuBar();
         TextArea ta = new TextArea();
-
 
         final VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
@@ -265,52 +77,41 @@ public class World extends Application {
         vbox.setPadding(new Insets(0, 10, 0, 10));
         vbox.setVisible(true);
 
-        Menu teamMenu = new Menu("Team");
-        MenuItem add = new MenuItem("Add a New Team");
-        add.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                addTeam(stage,scene);
-            }
-        });
+        Menu teamMenu = getMenuTeam(stage, scene);
 
-        MenuItem delete = new MenuItem("Delete a Team");
-        delete.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                deleteTeam();
-            }
-        });
+        Menu datamenu = getMenuPlayer(stage, scene);
 
-        MenuItem review = new MenuItem("Review all teams");
-        review.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                System.out.println("All teams:" + teamlog.getCurrentTeams());
-                //ta.setText("All teams:" + teamlog.getCurrentTeams());
-            }
-        });
+        Menu eventmenu = getMenuEvent(stage, scene);
 
-        teamMenu.getItems().addAll(add, delete, review);
+        menuBar.getMenus().addAll(getFileMenu(), teamMenu, eventmenu, datamenu);
 
+        printConsole(ta);
+
+        ((VBox) scene.getRoot()).getChildren().addAll(menuBar, vbox, ta);
+
+        stage.setScene(scene);
+        stage.show();
+
+    }
+
+    private void printConsole(TextArea ta) {
+        Console console = new Console(ta);
+        PrintStream ps = new PrintStream(console, true);
+        System.setOut(ps);
+        System.setErr(ps);
+    }
+
+    private Menu getMenuEvent(Stage stage, Scene scene) {
         Menu eventmenu = new Menu("Event");
 
-        MenuItem newseason = new MenuItem("New Season");
-        newseason.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                season = new Season(teamlog.getCurrentTeams());
-            }
-        });
+        MenuItem newseason = getMenuItemSeason();
 
-        MenuItem match = new MenuItem("New Match Day");
-        match.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                season.newMatchDay();
-                eventlog.update(season.getHistory());
-            }
-        });
+        MenuItem match = getMenuItemMatch();
 
         MenuItem teamboard = new MenuItem("View Leaderboard");
         teamboard.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                viewTeamBoard(stage,scene);
+                viewTeamBoard(stage, scene);
             }
         });
 
@@ -321,21 +122,106 @@ public class World extends Application {
             }
         });
 
-        eventmenu.getItems().addAll(newseason, match, teamboard,view);
+        eventmenu.getItems().addAll(newseason, match, teamboard, view);
+        return eventmenu;
+    }
 
-        Menu datamenu = new Menu("Data");
-
-        MenuItem load = new MenuItem("Load");
-        load.setOnAction(new EventHandler<ActionEvent>() {
+    private MenuItem getMenuItemMatch() {
+        MenuItem match = new MenuItem("New Match Day");
+        match.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                try {
-                    load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                season.newMatchDay();
+                eventlog.update(season.getHistory());
+            }
+        });
+        return match;
+    }
+
+    private MenuItem getMenuItemSeason() {
+        MenuItem newseason = new MenuItem("New Season");
+        newseason.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                season = new Season(teamlog.getCurrentTeams());
+            }
+        });
+        return newseason;
+    }
+
+    private Menu getMenuPlayer(Stage stage, Scene scene) {
+        Menu datamenu = new Menu("Player");
+
+
+        MenuItem web = new MenuItem("Update Player Rating");
+        web.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                fantasyWebData.updateFromWeb(teamlog.getCurrentTeams());
             }
         });
 
+        MenuItem pool = new MenuItem("View Player Pool");
+        pool.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                viewPlayerPool(stage, scene);
+            }
+        });
+
+
+        datamenu.getItems().addAll(pool, web);
+        return datamenu;
+    }
+
+    private Menu getMenuTeam(Stage stage, Scene scene) {
+        Menu teamMenu = new Menu("Team");
+        MenuItem add = new MenuItem("Add a New Team");
+        add.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                addTeam(stage, scene);
+            }
+        });
+
+        MenuItem delete = new MenuItem("Delete a Team");
+        delete.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                //!!!!!!!
+            }
+        });
+
+        MenuItem review = getMenuItemReview();
+
+        teamMenu.getItems().addAll(add, delete, review);
+        return teamMenu;
+    }
+
+    private MenuItem getMenuItemReview() {
+        MenuItem review = new MenuItem("Review all teams");
+        review.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                System.out.println("All teams:" + teamlog.getCurrentTeams());
+                //ta.setText("All teams:" + teamlog.getCurrentTeams());
+            }
+        });
+        return review;
+    }
+
+    private Menu getFileMenu() {
+        Menu fileMenu = new Menu("File");
+
+        MenuItem load = getMenuItemLoad();
+
+        MenuItem save = getMenuItemSave();
+
+        MenuItem exit = new MenuItem("Exit");
+        exit.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                System.exit(0);
+            }
+        });
+
+        fileMenu.getItems().addAll(load,save,exit);
+        return fileMenu;
+    }
+
+    private MenuItem getMenuItemSave() {
         MenuItem save = new MenuItem("Save");
         save.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
@@ -346,46 +232,53 @@ public class World extends Application {
                 }
             }
         });
+        return save;
+    }
 
-        MenuItem web = new MenuItem("Web");
-        web.setOnAction(new EventHandler<ActionEvent>() {
+    private MenuItem getMenuItemLoad() {
+        MenuItem load = new MenuItem("Load");
+        load.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                fantasyWebData.updateFromWeb(teamlog.getCurrentTeams());
+                try {
+                    load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
-
-        MenuItem pool = new MenuItem("Pool");
-        pool.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                viewPlayerPool(stage,scene);
-            }
-        });
-
-
-        datamenu.getItems().addAll(load,save,web,pool);
-
-        menuBar.getMenus().addAll(teamMenu,eventmenu,datamenu);
-
-        Console console = new Console(ta);
-        PrintStream ps = new PrintStream(console, true);
-        System.setOut(ps);
-        System.setErr(ps);
-
-        ((VBox) scene.getRoot()).getChildren().addAll(menuBar,vbox,ta);
-
-        stage.setScene(scene);
-        stage.show();
-
+        return load;
     }
 
     public void addTeam(Stage stage, Scene scene) {
 
         ArrayList<Player> assembleTeam = new ArrayList<>();
+
         Button button1 = getHomeButton(stage, scene);
 
         TextField teamname = new TextField();
         teamname.setPromptText("Please enter your team name");
 
+        Button button2 = getButtonConfirmNewTeam(assembleTeam, teamname);
+
+        VBox layout1 = new VBox();
+        layout1.getChildren().addAll(button1, button2, teamname);
+
+        final CheckBox[] cbs = getCheckBoxes(assembleTeam);
+
+        VBox layout2 = new VBox();
+        layout2.getChildren().addAll(cbs);
+
+        ScrollPane sp = new ScrollPane();
+        sp.setContent(layout2);
+
+        layout1.getChildren().add(sp);
+
+        Scene scene2 = new Scene(layout1, 300, 450);
+        stage.setScene(scene2);
+
+    }
+
+    private Button getButtonConfirmNewTeam(ArrayList<Player> assembleTeam, TextField teamname) {
         Button button2 = new Button("Confirm");
         button2.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -396,10 +289,10 @@ public class World extends Application {
                 teamlog.addTeam(newTeam);
             }
         });
+        return button2;
+    }
 
-        VBox layout1 = new VBox();
-        layout1.getChildren().addAll(button1,button2,teamname);
-
+    private CheckBox[] getCheckBoxes(ArrayList<Player> assembleTeam) {
         final CheckBox[] cbs = new CheckBox[50];
 
         for (int i = 0; i < 50; i++) {
@@ -419,30 +312,19 @@ public class World extends Application {
                 }
             });
         }
-
-        VBox layout2 = new VBox();
-        layout2.getChildren().addAll(cbs);
-
-        ScrollPane sp = new ScrollPane();
-        sp.setContent(layout2);
-
-        layout1.getChildren().add(sp);;
-
-        Scene scene2 = new Scene(layout1,300,450);
-        stage.setScene(scene2);
-
+        return cbs;
     }
 
     public void viewPlayerPool(Stage stage, Scene scene) {
         VBox layout = new VBox();
-        layout.getChildren().addAll(getHomeButton(stage,scene),getPlayerTableView());
-        stage.setScene(new Scene(layout,300,450));
+        layout.getChildren().addAll(getHomeButton(stage, scene), getPlayerTableView());
+        stage.setScene(new Scene(layout, 300, 450));
     }
 
     public void viewTeamBoard(Stage stage, Scene scene) {
         VBox layout = new VBox();
-        layout.getChildren().addAll(getHomeButton(stage,scene),getTeamTableView());
-        stage.setScene(new Scene(layout,300,450));
+        layout.getChildren().addAll(getHomeButton(stage, scene), getTeamTableView());
+        stage.setScene(new Scene(layout, 300, 450));
     }
 
 
@@ -472,7 +354,7 @@ public class World extends Application {
 
         table.setItems(playerpool.getData());
 
-        table.getColumns().addAll(idCol,nameCol,overallCol);
+        table.getColumns().addAll(idCol, nameCol, overallCol);
         return table;
     }
 
@@ -490,7 +372,7 @@ public class World extends Application {
 
         table.setItems(season.getData());
 
-        table.getColumns().addAll(nameCol,winCol,lossCol);
+        table.getColumns().addAll(nameCol, winCol, lossCol);
         return table;
     }
 

@@ -26,6 +26,28 @@ class TestTeam {
     }
 
     @Test
+    void testAddWin() {
+        team.addwin();
+        assertEquals(team.getWin(),1);
+    }
+
+    @Test
+    void testAddLoss() {
+        team.addloss();
+        assertEquals(team.getLoss(),1);
+    }
+
+    @Test
+    void testReset() {
+        team.addloss();
+        team.addwin();
+        team.resetRecord();
+        assertEquals(team.getLoss(),0);
+        assertEquals(team.getWin(),0);
+    }
+
+
+    @Test
     void testGetTeamName() {
         assertEquals(team.getTeamname(),null);
     }
