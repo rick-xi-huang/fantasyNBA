@@ -18,10 +18,14 @@ public class Playerpool {
     private HashMap<Integer,Player> allplayers;
     final ObservableList<PlayerDisplay> data = FXCollections.observableArrayList();
 
+    //.csv parsing
+    //FileReaderWriter
+    //https://drive.google.com/file/d/1hA9g_u-N0K0ZEzxBMYXl6IzEyoXSo4m3/view
+
     //load player information from the player pool
     //REQUIRES: NBApool.csv in correct format in the data folder
     //MODIFIES: this
-    //EFFECTS: store all player information in the playerpool object field
+    //EFFECTS: Create player objects from the parsing content and store them in the allplayers hashmap
 
     public Playerpool() throws IOException {
         allplayers = new HashMap<>();

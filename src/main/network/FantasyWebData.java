@@ -3,6 +3,7 @@ package network;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import model.Player;
@@ -12,7 +13,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+//XML Parsing
+//http://www.javased.com/index.php?api=javax.xml.parsers.DocumentBuilderFactory
 public class FantasyWebData {
+
+    private static DecimalFormat df = new DecimalFormat("#.##");
 
     private NodeList nodelist;
 
@@ -24,7 +29,9 @@ public class FantasyWebData {
         calOverall();
     }
 
-
+    //Obtain latest player rating information from web
+    //MODIFIES: this
+    //EFFECTS: store player informaion from web in the webpool arraylist
     private void getWebData() {
 
         try {
@@ -79,16 +86,19 @@ public class FantasyWebData {
     }
 
 
+    //Update all players in the current teams
+    //MODIFIES: teams
+    //EFFECTS: Compare every current player with the latest webpool, if there is a name match, update the player
+
     public void updateFromWeb(ArrayList<Team> teams) {
         ArrayList<Player> temp = getWebpool();
         for (Team team: teams) {
             for (Player player: team.getTeamplayers()) {
                 for (int i = 0; i < temp.size(); i++) {
-
                     Player next = temp.get(i);
                     if (player.getName().equals(next.getName())) {
                         player.setOverall(next.getOverall());
-                        System.out.println(player);
+                        System.out.println(player.getName() + " rating updated to " + df.format(player.getOverall()));
                     }
                 }
             }

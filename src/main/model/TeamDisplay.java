@@ -4,10 +4,6 @@ package model;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Objects;
-
 public class TeamDisplay {
 
     private SimpleStringProperty teamname;

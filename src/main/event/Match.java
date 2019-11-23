@@ -18,6 +18,9 @@ public class Match extends Subject {
         observerList.add(new BroadCast());
     }
 
+    //Start a match between two teams
+    //MODIFIES: this
+    //EFFECTS: simulate the result of the match, update scores, winner and loser, and notify the observers
 
     public void twoTeamsMatch() {
 

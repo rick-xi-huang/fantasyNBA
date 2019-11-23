@@ -9,7 +9,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import model.Player;
 import model.PlayerDisplay;
@@ -36,7 +35,6 @@ public class World extends Application {
     private Eventlog eventlog;
     private FantasyWebData fantasyWebData;
     private Season season;
-    private Stage stage;
 
     public World() throws IOException {
 
@@ -59,14 +57,22 @@ public class World extends Application {
         eventlog.save();
     }
 
+    //All UI codes reference
+    //https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/ui_controls.htm#JFXUI336
+
+
     public static void main(String[] args) {
         launch(args);
     }
 
+    //start the program, create user interface
+    //MODIFIES: this
+    //EFFECTS: display all UI elements for user input and program output
+
     @Override
     public void start(Stage stage) {
         stage.setTitle("Fantasy NBA");
-        Scene scene = new Scene(new VBox(), 400, 350);
+        Scene scene = new Scene(new VBox(), 600, 500);
         scene.setFill(Color.OLDLACE);
         MenuBar menuBar = new MenuBar();
         TextArea ta = new TextArea();
@@ -182,7 +188,7 @@ public class World extends Application {
         MenuItem delete = new MenuItem("Delete a Team");
         delete.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                //!!!!!!!
+                deleteTeam(stage,scene);
             }
         });
 
@@ -249,7 +255,7 @@ public class World extends Application {
         return load;
     }
 
-    public void addTeam(Stage stage, Scene scene) {
+    private void addTeam(Stage stage, Scene scene) {
 
         ArrayList<Player> assembleTeam = new ArrayList<>();
 
@@ -263,7 +269,7 @@ public class World extends Application {
         VBox layout1 = new VBox();
         layout1.getChildren().addAll(button1, button2, teamname);
 
-        final CheckBox[] cbs = getCheckBoxes(assembleTeam);
+        final CheckBox[] cbs = getCheckBoxesPlayer(assembleTeam);
 
         VBox layout2 = new VBox();
         layout2.getChildren().addAll(cbs);
@@ -273,14 +279,14 @@ public class World extends Application {
 
         layout1.getChildren().add(sp);
 
-        Scene scene2 = new Scene(layout1, 300, 450);
+        Scene scene2 = new Scene(layout1, 450, 450);
         stage.setScene(scene2);
 
     }
 
     private Button getButtonConfirmNewTeam(ArrayList<Player> assembleTeam, TextField teamname) {
-        Button button2 = new Button("Confirm");
-        button2.setOnAction(new EventHandler<ActionEvent>() {
+        Button button = new Button("Confirm");
+        button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Team newTeam = new Team();
@@ -289,10 +295,10 @@ public class World extends Application {
                 teamlog.addTeam(newTeam);
             }
         });
-        return button2;
+        return button;
     }
 
-    private CheckBox[] getCheckBoxes(ArrayList<Player> assembleTeam) {
+    private CheckBox[] getCheckBoxesPlayer(ArrayList<Player> assembleTeam) {
         final CheckBox[] cbs = new CheckBox[50];
 
         for (int i = 0; i < 50; i++) {
@@ -301,7 +307,6 @@ public class World extends Application {
             cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
                 public void changed(ObservableValue<? extends Boolean> ov,
                                     Boolean oldval, Boolean newval) {
-//                  assembleTeam.add(new_val ? playerpool.getPlayer(finalI) : null);
                     if (newval) {
                         assembleTeam.add(playerpool.getPlayer(finalI));
                     }
@@ -315,13 +320,71 @@ public class World extends Application {
         return cbs;
     }
 
-    public void viewPlayerPool(Stage stage, Scene scene) {
+    private void deleteTeam(Stage stage, Scene scene) {
+
+        ArrayList<Team> teamstodelete = new ArrayList<>();
+
+        Button button1 = getHomeButton(stage, scene);
+
+        Button button2 = getButtonConfirmDeleteTeam(teamstodelete);
+
+        VBox layout1 = new VBox();
+
+        final CheckBox[] cbs = getCheckBoxesTeam(teamstodelete);
+
+        layout1.getChildren().addAll(button1, button2);
+        layout1.getChildren().addAll(cbs);
+
+        Scene scene2 = new Scene(layout1, 450, 450);
+        stage.setScene(scene2);
+
+    }
+
+    private Button getButtonConfirmDeleteTeam(ArrayList<Team> teamstodelete) {
+        Button button = new Button("Delete");
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                for (Team team: teamstodelete) {
+                    teamlog.removeTeam(team);
+                }
+            }
+        });
+        return button;
+    }
+
+    private CheckBox[] getCheckBoxesTeam(ArrayList<Team> teamstodelete) {
+
+        int teamcount = teamlog.getCurrentTeams().size();
+
+        final CheckBox[] cbs = new CheckBox[teamcount];
+
+        for (int i = 0; i < teamcount; i++) {
+            final CheckBox cb = cbs[i] = new CheckBox(teamlog.getCurrentTeams().get(i).getTeamname());
+            int finalI = i;
+            cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                public void changed(ObservableValue<? extends Boolean> ov,
+                                    Boolean oldval, Boolean newval) {
+                    if (newval) {
+                        teamstodelete.add(teamlog.getCurrentTeams().get(finalI));
+                    }
+                    if (!newval) {
+                        teamstodelete.remove(teamlog.getCurrentTeams().get(finalI));
+                    }
+
+                }
+            });
+        }
+        return cbs;
+    }
+
+    private void viewPlayerPool(Stage stage, Scene scene) {
         VBox layout = new VBox();
         layout.getChildren().addAll(getHomeButton(stage, scene), getPlayerTableView());
         stage.setScene(new Scene(layout, 300, 450));
     }
 
-    public void viewTeamBoard(Stage stage, Scene scene) {
+    private void viewTeamBoard(Stage stage, Scene scene) {
         VBox layout = new VBox();
         layout.getChildren().addAll(getHomeButton(stage, scene), getTeamTableView());
         stage.setScene(new Scene(layout, 300, 450));

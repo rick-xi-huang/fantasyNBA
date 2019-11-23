@@ -1,8 +1,6 @@
 package data;
 
-import model.Player;
 import model.Team;
-import network.FantasyWebData;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -19,7 +17,13 @@ public class Teamlog implements Serializable, Loadable, Saveable {
         return currentTeams;
     }
 
+//    code reference
+//    https://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html
+//    https://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html
 
+    //load current teams from the file
+    //MODIFIES: this
+    //EFFECTS: load the arraylist of currentTeams objects from the file
 
     @Override
     public void load() throws IOException {
@@ -35,6 +39,9 @@ public class Teamlog implements Serializable, Loadable, Saveable {
 
     }
 
+    //save current teams to the file
+    //MODIFIES: this
+    //EFFECTS: save the arraylist of currentTeams objects to the file
     @Override
     public void save() throws IOException {
         FileOutputStream fos = new FileOutputStream("t.tmp");

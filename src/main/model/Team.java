@@ -49,8 +49,8 @@ public class Team implements Serializable {
     }
 
     //add a new player to the team
-    //MODIFIES: this
-    //EFFECTS: add a new player object to ArrayList teamplayers
+    //MODIFIES: this player
+    //EFFECTS: add a new player object to teamplayers list
     public void addplayer(Player player) {
         if (!teamplayers.contains(player)) {
             teamplayers.add(player);
@@ -58,6 +58,9 @@ public class Team implements Serializable {
         }
     }
 
+    //remove the player from the team
+    //MODIFIES: this player
+    //EFFECTS: remove the player object from teamplayers list
     public void removeplayer(Player player) {
         if (teamplayers.contains(player)) {
             teamplayers.remove(player);
@@ -84,12 +87,18 @@ public class Team implements Serializable {
         return teamname + "   " + teamplayers + "\n";
     }
 
+
+    //MODIFIES: this
+    //EFFECTS: calculate and return teampower
     public int teamPower() {
         for (Player player : teamplayers) {
             teamPower = (int) (teamPower + player.getOverall());
         }
         return teamPower;
     }
+
+    //override hashcode and equals method
+    //EFFECTS: return true if two team objects have the same name, same teamplayers and teampowers
 
     @Override
     public boolean equals(Object o) {
@@ -110,6 +119,8 @@ public class Team implements Serializable {
         return Objects.hash(teamplayers, teamname, teamPower);
     }
 
+    //MODIFIES: this
+    //EFFECTS: reset win and loss back to 0
     public void resetRecord() {
         win = 0;
         loss = 0;

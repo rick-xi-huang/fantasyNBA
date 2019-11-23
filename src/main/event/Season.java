@@ -35,11 +35,18 @@ public class Season extends Subject {
         trades = new ArrayList<>();
     }
 
+    //reset all win loss record for all current teams
+    //MODIFIES: this
+    //EFFECTS: loop over all current teams and reset win loss record for each team
     private void clearRecord() {
         for (Team team: currentTeams) {
             team.resetRecord();
         }
     }
+
+    //start a new match day
+    //MODIFIES: this
+    //EFFECTS: call allTeamsMatch, catch exception if there are less than 2 teams
 
     public void newMatchDay() {
 
@@ -50,7 +57,9 @@ public class Season extends Subject {
         }
     }
 
-
+    //start matches among all teams
+    //MODIFIES: this
+    //EFFECTS: instantiate match for every two teams, add matches to the list, add results to the list
     public void allTeamsMatch() throws InvalidMatch {
 
         String result = date + "\n";
@@ -77,6 +86,10 @@ public class Season extends Subject {
     public ArrayList<String> getHistory() {
         return history;
     }
+
+    //Convert and get back displayable team objects for Table views
+    //MODIFIES: data teamDisplay
+    //EFFECTS: Return a list of TeamDisplay objects for table display
 
     public ObservableList<TeamDisplay> getData() {
         final ObservableList<TeamDisplay> data = FXCollections.observableArrayList();

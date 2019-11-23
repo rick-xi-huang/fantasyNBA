@@ -33,6 +33,9 @@ public class Player implements Serializable {
         this.name = name;
     }
 
+    //set the team of the player
+    //MODIFIES: this team
+    //EFFECTS: change the team which the player is assigned to
     public void setTeam(Team team) {
         if (!(this.team == team)) {
             this.team = team;
@@ -40,6 +43,9 @@ public class Player implements Serializable {
         }
     }
 
+    //remove team association from the player
+    //MODIFIES: this team
+    //EFFECTS: remove the team which the player is assigned to
     public void removeTeam() {
         if (!(this.team == null)) {
             this.team.removeplayer(this);
@@ -78,6 +84,8 @@ public class Player implements Serializable {
         return "(" + id + ")" + " " + name + " " + overall;
     }
 
+    //override hashcode and equals method
+    //EFFECTS: return true if two player objects have the same id and name
     @Override
     public boolean equals(Object o) {
         if (this == o) {

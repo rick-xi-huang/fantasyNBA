@@ -1,18 +1,23 @@
 package data;
 
-import model.Team;
-
 import java.io.*;
 import java.util.ArrayList;
 
 public class Eventlog implements Serializable, Loadable, Saveable {
 
-    public ArrayList<String> allEvents;
+    private ArrayList<String> allEvents;
 
     public Eventlog() {
         allEvents = new ArrayList<>();
     }
 
+//    code reference
+//    https://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html
+//    https://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html
+
+    //load event strings list from the file
+    //MODIFIES: this
+    //EFFECTS: load the arraylist of event String from the file
     @Override
     public void load() throws IOException {
         try {
@@ -27,6 +32,10 @@ public class Eventlog implements Serializable, Loadable, Saveable {
 
     }
 
+    //Save event strings list to the file
+    //MODIFIES: this
+    //EFFECTS: Save the arraylist of event String to the file
+
     @Override
     public void save() throws IOException {
         FileOutputStream fos = new FileOutputStream("e.tmp");
@@ -39,10 +48,6 @@ public class Eventlog implements Serializable, Loadable, Saveable {
         allEvents.add(event);
     }
 
-//    public void removeEvent(String event) {
-//        allEvents.remove(event);
-//    }
-
     public void update(ArrayList<String> allEvents) {
         this.allEvents = allEvents;
     }
@@ -50,6 +55,9 @@ public class Eventlog implements Serializable, Loadable, Saveable {
     public ArrayList<String> getAllEvents() {
         return allEvents;
     }
+
+    //MODIFIES:
+    //EFFECTS: Print all historical events
 
     public void printAll() {
         for (String event : allEvents) {

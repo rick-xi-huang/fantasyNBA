@@ -4,6 +4,8 @@ import model.Team;
 
 public class BroadCast implements Observer {
 
+    //MODIFIES: match
+    //EFFECTS: print match results and update the win loss record
 
     @Override
     public void update(Match match) {
