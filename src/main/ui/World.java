@@ -8,7 +8,18 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Player;
 import model.PlayerDisplay;
@@ -22,10 +33,10 @@ import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
 
 
 public class World extends Application {
@@ -72,16 +83,18 @@ public class World extends Application {
     @Override
     public void start(Stage stage) {
         stage.setTitle("Fantasy NBA");
-        Scene scene = new Scene(new VBox(), 600, 500);
-        scene.setFill(Color.OLDLACE);
+        VBox layout = new VBox();
+
         MenuBar menuBar = new MenuBar();
         TextArea ta = new TextArea();
+        ta.setMinHeight(200);
 
-        final VBox vbox = new VBox();
-        vbox.setAlignment(Pos.CENTER);
-        vbox.setSpacing(10);
-        vbox.setPadding(new Insets(0, 10, 0, 10));
-        vbox.setVisible(true);
+        Image image = new Image("fantasy.png");
+
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(300);
+
+        Scene scene = new Scene(layout, 600, 500);
 
         Menu teamMenu = getMenuTeam(stage, scene);
 
@@ -93,7 +106,7 @@ public class World extends Application {
 
         printConsole(ta);
 
-        ((VBox) scene.getRoot()).getChildren().addAll(menuBar, vbox, ta);
+        layout.getChildren().addAll(menuBar,ta,imageView);
 
         stage.setScene(scene);
         stage.show();
@@ -188,7 +201,7 @@ public class World extends Application {
         MenuItem delete = new MenuItem("Delete a Team");
         delete.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                deleteTeam(stage,scene);
+                deleteTeam(stage, scene);
             }
         });
 
@@ -202,8 +215,7 @@ public class World extends Application {
         MenuItem review = new MenuItem("Review all teams");
         review.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                System.out.println("All teams:" + teamlog.getCurrentTeams());
-                //ta.setText("All teams:" + teamlog.getCurrentTeams());
+                System.out.println("All teams: \n" + teamlog.getCurrentTeams());
             }
         });
         return review;
@@ -223,7 +235,7 @@ public class World extends Application {
             }
         });
 
-        fileMenu.getItems().addAll(load,save,exit);
+        fileMenu.getItems().addAll(load, save, exit);
         return fileMenu;
     }
 
@@ -264,35 +276,43 @@ public class World extends Application {
         TextField teamname = new TextField();
         teamname.setPromptText("Please enter your team name");
 
-        Button button2 = getButtonConfirmNewTeam(assembleTeam, teamname);
+        Label label = new Label("Please select five players");
 
-        VBox layout1 = new VBox();
-        layout1.getChildren().addAll(button1, button2, teamname);
+        Button button2 = getButtonConfirmNewTeam(assembleTeam, teamname, label);
+
+        HBox hbox = new HBox(button1, button2);
+        hbox.setSpacing(15);
 
         final CheckBox[] cbs = getCheckBoxesPlayer(assembleTeam);
 
-        VBox layout2 = new VBox();
-        layout2.getChildren().addAll(cbs);
+        ScrollPane sp = new ScrollPane(new VBox(cbs));
 
-        ScrollPane sp = new ScrollPane();
-        sp.setContent(layout2);
+        VBox layout1 = new VBox(teamname,label,sp,hbox);
 
-        layout1.getChildren().add(sp);
+        layout1.setPadding(new Insets(15, 15, 15, 15));
+        layout1.setSpacing(15);
 
         Scene scene2 = new Scene(layout1, 450, 450);
         stage.setScene(scene2);
 
     }
 
-    private Button getButtonConfirmNewTeam(ArrayList<Player> assembleTeam, TextField teamname) {
+    private Button getButtonConfirmNewTeam(ArrayList<Player> assembleTeam, TextField teamname, Label label) {
         Button button = new Button("Confirm");
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Team newTeam = new Team();
-                newTeam.setTeamplayers(assembleTeam);
-                newTeam.setTeamname(teamname.getText());
-                teamlog.addTeam(newTeam);
+                if (assembleTeam.size() == 5) {
+                    Team newTeam = new Team();
+                    newTeam.setTeamplayers(assembleTeam);
+                    newTeam.setTeamname(teamname.getText());
+                    teamlog.addTeam(newTeam);
+                    label.setText("New Team Added");
+                    label.setStyle("-fx-text-fill: green; -fx-font-size: 12px;");
+                } else {
+                    label.setText("Invalid Selection");
+                    label.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+                }
             }
         });
         return button;
@@ -328,12 +348,16 @@ public class World extends Application {
 
         Button button2 = getButtonConfirmDeleteTeam(teamstodelete);
 
-        VBox layout1 = new VBox();
+        HBox hbox = new HBox(button1,button2);
+        hbox.setSpacing(15);
 
         final CheckBox[] cbs = getCheckBoxesTeam(teamstodelete);
 
-        layout1.getChildren().addAll(button1, button2);
-        layout1.getChildren().addAll(cbs);
+        VBox layout1 = new VBox(cbs);
+        layout1.setPadding(new Insets(15,15,15,15));
+        layout1.setSpacing(15);
+
+        layout1.getChildren().add(hbox);
 
         Scene scene2 = new Scene(layout1, 450, 450);
         stage.setScene(scene2);
@@ -345,7 +369,7 @@ public class World extends Application {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                for (Team team: teamstodelete) {
+                for (Team team : teamstodelete) {
                     teamlog.removeTeam(team);
                 }
             }
@@ -392,7 +416,7 @@ public class World extends Application {
 
 
     private Button getHomeButton(Stage stage, Scene scene) {
-        Button button1 = new Button("Go to Home");
+        Button button1 = new Button("Go Back");
         button1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -406,13 +430,13 @@ public class World extends Application {
     private TableView<PlayerDisplay> getPlayerTableView() {
         TableView<PlayerDisplay> table = new TableView<>();
 
-        TableColumn idCol = new TableColumn("id");
+        TableColumn idCol = new TableColumn("ID");
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        TableColumn nameCol = new TableColumn("name");
+        TableColumn nameCol = new TableColumn("Name");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        TableColumn overallCol = new TableColumn("overall");
+        TableColumn overallCol = new TableColumn("Overall");
         overallCol.setCellValueFactory(new PropertyValueFactory<>("overall"));
 
         table.setItems(playerpool.getData());
@@ -424,13 +448,13 @@ public class World extends Application {
     private TableView<TeamDisplay> getTeamTableView() {
         TableView<TeamDisplay> table = new TableView<>();
 
-        TableColumn nameCol = new TableColumn("teamname");
+        TableColumn nameCol = new TableColumn("Teamname");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("teamname"));
 
-        TableColumn winCol = new TableColumn("win");
+        TableColumn winCol = new TableColumn("Win");
         winCol.setCellValueFactory(new PropertyValueFactory<>("win"));
 
-        TableColumn lossCol = new TableColumn("loss");
+        TableColumn lossCol = new TableColumn("Loss");
         lossCol.setCellValueFactory(new PropertyValueFactory<>("loss"));
 
         table.setItems(season.getData());
